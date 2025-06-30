@@ -1,0 +1,8 @@
+vendor
+.claude/settings.local.json
+.phpstan
+tests/junit.xml
+tests/testdox.html
+.phpunit.result.cache
+.openapi-generator
+

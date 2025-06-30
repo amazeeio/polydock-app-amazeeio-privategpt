@@ -1,0 +1,18 @@
+{
+  "id": 123,
+  "name": "test-project-private-gpt",
+  "git_url": "https://github.com/amazeeio/private-gpt-template.git",
+  "production_environment": "main",
+  "auto_idle": 1,
+  "storage_calc": 1,
+  "problems_ui": 1,
+  "facts_ui": 1,
+  "production_routes": "",
+  "standby_production_environment": "",
+  "environments": [],
+  "organization": {
+    "id": 456,
+    "name": "test-org"
+  },
+  "created": "2024-01-01T00:00:00+00:00"
+}

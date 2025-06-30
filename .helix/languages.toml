@@ -1,0 +1,3 @@
+[[language]]
+name = "php"
+formatter = { command = "./vendor/bin/pint", args = ["--format", "--stdin-filename", "temp.php"] }

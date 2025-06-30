@@ -1,0 +1,10 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - vendor
+    tmpDir: .phpstan
+    ignoreErrors:
+        - '#Call to an undefined method Mockery\\ExpectationInterface\|Mockery\\HigherOrderMessage\|Mockery\\MockInterface::(andReturn|andThrow)\(\)#'

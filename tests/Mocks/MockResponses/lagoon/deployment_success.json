@@ -1,0 +1,14 @@
+{
+  "id": 789,
+  "name": "main",
+  "deploy_type": "branch",
+  "environment_type": "production",
+  "deploy_title": "Deploy main branch",
+  "deployment_state": "complete",
+  "route": "https://main-test-project-private-gpt.lagoon.example.com",
+  "routes": [
+    "https://main-test-project-private-gpt.lagoon.example.com"
+  ],
+  "created": "2024-01-01T00:00:00+00:00",
+  "updated": "2024-01-01T00:05:00+00:00"
+}

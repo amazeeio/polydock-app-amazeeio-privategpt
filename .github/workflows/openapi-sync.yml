@@ -1,0 +1,155 @@
+name: OpenAPI Schema Sync
+
+on:
+  schedule:
+    # Run daily at 3 AM UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+    # Allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-openapi-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: json, curl
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+
+      - name: Download latest OpenAPI spec
+        run: |
+          curl -s -o openapi-new.json https://api.amazee.ai/openapi.json
+
+          # Verify the downloaded file is valid JSON
+          if ! jq empty openapi-new.json 2>/dev/null; then
+            echo "Downloaded OpenAPI spec is not valid JSON"
+            exit 1
+          fi
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if ! cmp -s openapi.json openapi-new.json; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "OpenAPI spec changes detected"
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No changes in OpenAPI spec"
+          fi
+
+      - name: Generate new DTOs if changes detected
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          # Replace the old spec with the new one
+          mv openapi-new.json openapi.json
+
+          # Generate new DTOs
+          composer generate-dtos
+
+          # Check if any files were actually changed
+          if git diff --quiet; then
+            echo "dto_changes=false" >> $GITHUB_OUTPUT
+            echo "No DTO changes needed despite OpenAPI changes"
+          else
+            echo "dto_changes=true" >> $GITHUB_OUTPUT
+            echo "DTO files have been updated"
+          fi
+        id: generate_dtos
+
+      - name: Run tests
+        if: steps.check_changes.outputs.changes_detected == 'true' && steps.generate_dtos.outputs.dto_changes == 'true'
+        run: |
+          # Install dev dependencies for testing
+          composer install --prefer-dist --no-progress --no-suggest
+          composer test
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.changes_detected == 'true' && steps.generate_dtos.outputs.dto_changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            feat: update DTOs to match latest amazee.ai OpenAPI spec
+
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+
+            Co-Authored-By: Claude <noreply@anthropic.com>
+          title: "chore: sync DTOs with latest amazee.ai OpenAPI specification"
+          body: |
+            ## Summary
+
+            This PR updates the Valinor DTOs to match the latest amazee.ai OpenAPI specification.
+
+            ### Changes
+            - Updated `openapi.json` with latest specification from https://api.amazee.ai/openapi.json
+            - Regenerated DTOs using the OpenAPI Generator
+            - All tests pass with the new DTOs
+
+            ### Verification
+            - ✅ Downloaded latest OpenAPI spec from amazee.ai
+            - ✅ Generated new DTOs using `composer generate-dtos`
+            - ✅ All tests pass
+            - ✅ Code follows existing patterns and conventions
+
+            ### Review Notes
+            Please review the changes carefully to ensure:
+            1. All API response structures are correctly mapped
+            2. No breaking changes are introduced to existing functionality
+            3. Type safety is maintained with Valinor validation
+
+            ---
+
+            🤖 This PR was automatically created by the OpenAPI Sync workflow.
+
+            Generated on: ${{ steps.date.outputs.date }}
+          branch: feature/sync-openapi-dtos-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            automated
+            dto-update
+            openapi-sync
+          reviewers: |
+            # Add your team's reviewers here
+          draft: false
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
+
+      - name: Clean up
+        if: always()
+        run: |
+          # Remove temporary files
+          rm -f openapi-new.json
+
+      - name: Summary
+        run: |
+          echo "## OpenAPI Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Changes detected**: ${{ steps.check_changes.outputs.changes_detected }}" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ steps.check_changes.outputs.changes_detected }}" == "true" ]]; then
+            echo "- **DTOs updated**: ${{ steps.generate_dtos.outputs.dto_changes }}" >> $GITHUB_STEP_SUMMARY
+            if [[ "${{ steps.generate_dtos.outputs.dto_changes }}" == "true" ]]; then
+              echo "- **Pull Request**: Created for review" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- **Pull Request**: Not needed (no DTO changes)" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "- **Action**: No changes needed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- **Checked at**: ${{ steps.date.outputs.date }}" >> $GITHUB_STEP_SUMMARY
+

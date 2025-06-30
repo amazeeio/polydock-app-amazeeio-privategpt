@@ -1,0 +1,9 @@
+{
+  "id": 456,
+  "litellm_token": "vdb-key-xyz789uvw012",
+  "litellm_api_url": "https://api.vdb.amazee.ai/v1",
+  "owner_id": 1,
+  "team_id": 123,
+  "region": "us-east-1",
+  "name": "test-vdb-key"
+}
