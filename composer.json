@@ -28,9 +28,9 @@
     }
   ],
   "require": {
-    "amazeelabs/polydock-app": "^0.0.26",
-    "amazeelabs/polydock-app-amazeeio-generic": "*",
-    "amazeelabs/ft-lagoon-php": "^0.0.5",
+    "freedomtech-hosting/polydock-app": "^0.0.26",
+    "freedomtech-hosting/polydock-app-amazeeio-generic": "*",
+    "freedomtech-hosting/ft-lagoon-php": "^0.0.5",
     "guzzlehttp/guzzle": "^7.0",
     "cuyz/valinor": "^1.0"
   },
