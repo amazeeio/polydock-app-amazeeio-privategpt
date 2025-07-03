@@ -46,8 +46,8 @@ class FullWorkflowTest extends TestCase
         $this->assertContains('lagoon-deploy-project-prefix', $variableNames);
         $this->assertContains('lagoon-project-name', $variableNames);
         $this->assertContains('lagoon-deploy-group-name', $variableNames);
-        $this->assertContains('amazee-ai-api-key', $variableNames);
-        $this->assertContains('amazee-ai-api-url', $variableNames);
+        $this->assertContains('amazee-ai-backend-token', $variableNames);
+        $this->assertContains('amazee-ai-backend-url', $variableNames);
         $this->assertContains('amazee-ai-admin-email', $variableNames);
     }
 
@@ -182,10 +182,10 @@ class FullWorkflowTest extends TestCase
 
         // Mock successful variable update
         $lagoonClient->method('addOrUpdateScopedVariableForProject')
-            ->with('test-project', 'AMAZEE_AI_API_KEY', 'test-key', 'BUILD')
+            ->with('test-project', 'AMAZEE_AI_BACKEND_TOKEN', 'test-key', 'BUILD')
             ->willReturn([
                 'id' => 123,
-                'name' => 'AMAZEE_AI_API_KEY',
+                'name' => 'AMAZEE_AI_BACKEND_TOKEN',
                 'value' => 'test-key',
                 'scope' => 'BUILD',
             ]);
@@ -205,7 +205,7 @@ class FullWorkflowTest extends TestCase
         // Should not throw exception when successful
         $this->app->addOrUpdateLagoonProjectVariable(
             $appInstance,
-            'AMAZEE_AI_API_KEY',
+            'AMAZEE_AI_BACKEND_TOKEN',
             'test-key',
             'BUILD'
         );

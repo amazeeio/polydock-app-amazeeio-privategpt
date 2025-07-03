@@ -108,8 +108,8 @@ trait PostCreateAppInstanceTrait
             sleep(2);
             $this->postCreateLogger?->info($functionName.': injecting amazee.ai direct API credentials', $logContext);
 
-            $amazeeAiApiKey = $appInstance->getKeyValue('amazee-ai-api-key');
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_API_KEY', $amazeeAiApiKey, 'GLOBAL');
+            $amazeeAiBackendToken = $appInstance->getKeyValue('amazee-ai-backend-token');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $amazeeAiBackendToken, 'GLOBAL');
 
             $teamId = $appInstance->getKeyValue('amazee-ai-team-id');
             if ($teamId) {

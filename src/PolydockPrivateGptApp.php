@@ -86,8 +86,8 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
             new PolydockAppVariableDefinitionBase('lagoon-deploy-project-prefix'),
             new PolydockAppVariableDefinitionBase('lagoon-project-name'),
             new PolydockAppVariableDefinitionBase('lagoon-deploy-group-name'),
-            new PolydockAppVariableDefinitionBase('amazee-ai-api-key'),
-            new PolydockAppVariableDefinitionBase('amazee-ai-api-url'),
+            new PolydockAppVariableDefinitionBase('amazee-ai-backend-token'),
+            new PolydockAppVariableDefinitionBase('amazee-ai-backend-url'),
             new PolydockAppVariableDefinitionBase('amazee-ai-admin-email'),
         ];
     }

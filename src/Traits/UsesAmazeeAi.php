@@ -49,17 +49,17 @@ trait UsesAmazeeAi
     {
         $this->ensureAmazeeAiTraitInitialized();
 
-        $amazeeAiApiKey = $appInstance->getKeyValue('amazee-ai-api-key');
-        if (empty($amazeeAiApiKey)) {
-            throw new PolydockAppInstanceStatusFlowException('amazee.ai API key is required to be set in the app instance');
+        $amazeeAiBackendToken = $appInstance->getKeyValue('amazee-ai-backend-token');
+        if (empty($amazeeAiBackendToken)) {
+            throw new PolydockAppInstanceStatusFlowException('amazee.ai backend token is required to be set in the app instance');
         }
 
-        $amazeeAiApiUrl = $appInstance->getKeyValue('amazee-ai-api-url');
-        if (empty($amazeeAiApiUrl)) {
-            $amazeeAiApiUrl = 'https://api.amazee.ai';
+        $amazeeAiBackendUrl = $appInstance->getKeyValue('amazee-ai-backend-url');
+        if (empty($amazeeAiBackendUrl)) {
+            $amazeeAiBackendUrl = 'https://backend.main.amazeeai.us2.amazee.io';
         }
 
-        $this->amazeeAiClient = new AmazeeAiClient($amazeeAiApiKey, $amazeeAiApiUrl);
+        $this->amazeeAiClient = new AmazeeAiClient($amazeeAiBackendToken, $amazeeAiBackendUrl);
 
         if (! $this->pingAmazeeAi()) {
             throw new PolydockAppInstanceStatusFlowException('amazee.ai API is not healthy');

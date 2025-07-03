@@ -110,8 +110,8 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
-                ['amazee-ai-api-key', 'test-api-key'],
-                ['amazee-ai-api-url', 'https://api.amazee.ai'],
+                ['amazee-ai-backend-token', 'test-backend-token'],
+                ['amazee-ai-backend-url', 'https://backend.main.amazeeai.us2.amazee.io'],
             ]);
 
         // Create test class with mocked client that returns healthy ping
@@ -138,8 +138,8 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
-                ['amazee-ai-api-key', 'test-api-key'],
-                ['amazee-ai-api-url', ''],
+                ['amazee-ai-backend-token', 'test-backend-token'],
+                ['amazee-ai-backend-url', ''],
             ]);
 
         // Create test class with mocked client that returns healthy ping
@@ -166,12 +166,12 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
-                ['amazee-ai-api-key', ''], // Empty string represents missing value per interface contract
-                ['amazee-ai-api-url', 'https://api.amazee.ai'],
+                ['amazee-ai-backend-token', ''], // Empty string represents missing value per interface contract
+                ['amazee-ai-backend-url', 'https://backend.main.amazeeai.us2.amazee.io'],
             ]);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
-        $this->expectExceptionMessage('amazee.ai API key is required to be set in the app instance');
+        $this->expectExceptionMessage('amazee.ai backend token is required to be set in the app instance');
         $this->testClass->setAmazeeAiClientFromAppInstance($appInstance);
     }
 

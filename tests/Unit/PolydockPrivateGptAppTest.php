@@ -60,8 +60,8 @@ class PolydockPrivateGptAppTest extends TestCase
             'lagoon-deploy-project-prefix',
             'lagoon-project-name',
             'lagoon-deploy-group-name',
-            'amazee-ai-api-key',
-            'amazee-ai-api-url',
+            'amazee-ai-backend-token',
+            'amazee-ai-backend-url',
             'amazee-ai-admin-email',
         ];
 
