@@ -105,6 +105,12 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_APP_INSTANCE_HEALTH_WEBHOOK_URL', $appInstance->getKeyValue('polydock-app-instance-health-webhook-url'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_FEATURE_FLAG_INSIGHTS', 'false', 'GLOBAL');
 
+            // Set the user's selected region information from the store
+            $storeName = $appInstance->storeApp->store->name;
+            $storeId = $appInstance->storeApp->store->id;
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_NAME', $storeName, 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_ID', $storeId, 'GLOBAL');
+
             sleep(2);
             $this->postCreateLogger?->info($functionName.': injecting amazee.ai direct API credentials', $logContext);
 
