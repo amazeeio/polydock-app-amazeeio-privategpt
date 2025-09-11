@@ -1,10 +1,10 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\Create;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 
@@ -106,7 +106,9 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_FEATURE_FLAG_INSIGHTS', 'false', 'GLOBAL');
 
             // Set the user's selected region information from the store
+            /** @phpstan-ignore-next-line */
             $storeName = $appInstance->storeApp->store->name;
+            /** @phpstan-ignore-next-line */
             $storeId = $appInstance->storeApp->store->id;
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_NAME', $storeName, 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_ID', $storeId, 'GLOBAL');

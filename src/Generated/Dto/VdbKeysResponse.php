@@ -1,6 +1,6 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
 
 /**
  * VdbKeysResponse

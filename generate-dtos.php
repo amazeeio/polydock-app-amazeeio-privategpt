@@ -92,7 +92,7 @@ function generateDto(string $modelName, array $schema, string $className): strin
     return <<<PHP
 <?php
 
-namespace Amazeelabs\\PolydockAppAmazeeioPrivateGpt\\Generated\\Dto;
+namespace Amazeeio\\PolydockAppAmazeeioPrivateGpt\\Generated\\Dto;
 
 /**
  * {$className}
@@ -113,7 +113,7 @@ PHP;
 $healthDto = <<<'PHP'
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
 
 /**
  * HealthResponse

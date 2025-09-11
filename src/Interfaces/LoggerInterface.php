@@ -1,6 +1,6 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces;
 
 use FreedomtechHosting\PolydockApp\PolydockAppBase;
 
