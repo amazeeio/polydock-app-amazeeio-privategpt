@@ -106,7 +106,9 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_FEATURE_FLAG_INSIGHTS', 'false', 'GLOBAL');
 
             // Set the user's selected region information from the store
+            /** @phpstan-ignore-next-line */
             $storeName = $appInstance->storeApp->store->name;
+            /** @phpstan-ignore-next-line */
             $storeId = $appInstance->storeApp->store->id;
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_NAME', $storeName, 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_SELECTED_REGION_ID', $storeId, 'GLOBAL');
