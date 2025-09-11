@@ -1,10 +1,10 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\Create;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 

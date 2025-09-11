@@ -1,8 +1,8 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 
 interface AmazeeAiOperationsInterface
@@ -20,7 +20,7 @@ interface AmazeeAiOperationsInterface
     /**
      * Generate keys for a team
      *
-     * @return array{team_id: string, llm_keys: \Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array;
 }

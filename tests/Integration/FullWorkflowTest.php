@@ -2,7 +2,7 @@
 
 namespace Tests\Integration;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
 use Mockery;
 use ReflectionClass;
 use Tests\TestCase;
@@ -158,7 +158,7 @@ class FullWorkflowTest extends TestCase
 
     public function test_can_work_with_mocked_amazee_ai_client(): void
     {
-        $client = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $client = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $client->method('ping')->willReturn(true);
 
         $result = $client->ping();
@@ -168,10 +168,10 @@ class FullWorkflowTest extends TestCase
 
     public function test_can_handle_amazee_ai_client_failures(): void
     {
-        $client = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-        $client->method('ping')->willThrowException(new \Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException('API is down'));
+        $client = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $client->method('ping')->willThrowException(new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException('API is down'));
 
-        $this->expectException(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException::class);
+        $this->expectException(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException::class);
         $client->ping();
     }
 

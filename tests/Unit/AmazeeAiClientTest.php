@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;

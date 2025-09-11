@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
 use Exception;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 use FreedomtechHosting\PolydockApp\PolydockAppVariableDefinitionBase;
@@ -161,7 +161,7 @@ class PolydockPrivateGptAppTest extends TestCase
     {
         $mockEngine = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockEngineInterface::class);
         $mockLagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
-        $mockServiceProvider = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface::class);
+        $mockServiceProvider = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface::class);
         $mockServiceProvider->method('getLagoonClient')->willReturn($mockLagoonClient);
 
         $mockEngine->method('getPolydockServiceProviderSingletonInstance')

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Traits;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 use Mockery;
 use ReflectionClass;
@@ -118,7 +118,7 @@ class UsesAmazeeAiTest extends TestCase
         $testClass = new TestClassWithUsesAmazeeAi;
         $testClass->setupAmazeeAiTrait($this->mockLogger);
 
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('ping')->willReturn(true);
 
         // Set the mock client directly to bypass the ping check in setAmazeeAiClientFromAppInstance
@@ -130,7 +130,7 @@ class UsesAmazeeAiTest extends TestCase
         // Verify the client was set
         $client = $property->getValue($testClass);
 
-        $this->assertInstanceOf(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class, $client);
+        $this->assertInstanceOf(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class, $client);
     }
 
     public function test_set_amazee_ai_direct_client_from_app_instance_uses_default_api_url_when_not_provided(): void
@@ -146,7 +146,7 @@ class UsesAmazeeAiTest extends TestCase
         $testClass = new TestClassWithUsesAmazeeAi;
         $testClass->setupAmazeeAiTrait($this->mockLogger);
 
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('ping')->willReturn(true);
 
         // Set the mock client directly
@@ -158,7 +158,7 @@ class UsesAmazeeAiTest extends TestCase
         // Verify the client was set
         $client = $property->getValue($testClass);
 
-        $this->assertInstanceOf(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class, $client);
+        $this->assertInstanceOf(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class, $client);
     }
 
     public function test_set_amazee_ai_direct_client_from_app_instance_throws_exception_when_api_key_is_missing(): void
@@ -177,7 +177,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_ping_amazee_ai_direct_returns_true_when_amazee_ai_service_is_healthy(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('ping')->willReturn(true);
 
         $reflection = new ReflectionClass($this->testClass);
@@ -192,7 +192,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_ping_amazee_ai_direct_returns_false_when_amazee_ai_service_is_unhealthy(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('ping')->willThrowException(new AmazeeAiClientException('API is down'));
 
         $reflection = new ReflectionClass($this->testClass);
@@ -213,7 +213,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_ping_amazee_ai_direct_throws_exception_when_ping_throws_client_exception(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('ping')
             ->willThrowException(new AmazeeAiClientException('API Error'));
 
@@ -229,7 +229,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_create_team_and_setup_administrator_successfully_creates_team_and_sets_up_administrator(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('createTeam')->willReturn($this->createTeamResponse());
         $mockClient->method('addTeamAdministrator')->willReturn($this->createAdministratorResponse());
 
@@ -254,7 +254,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_create_team_and_setup_administrator_throws_exception_when_admin_email_is_missing(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
@@ -275,7 +275,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_create_team_and_setup_administrator_throws_exception_when_team_creation_fails(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('createTeam')
             ->willThrowException(new AmazeeAiClientException('Team creation failed'));
 
@@ -298,7 +298,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_create_team_and_setup_administrator_throws_exception_when_team_creation_returns_no_id(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         // This test is no longer valid since DTOs guarantee required fields
         // Instead test that AmazeeAiClientException can be thrown for API failures
         $mockClient->method('createTeam')
@@ -323,7 +323,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_generate_keys_for_team_successfully_generates_llm_and_vdb_keys_for_team(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('generateLlmKeys')->willReturn($this->createLlmKeysResponse());
         $mockClient->method('generateVdbKeys')->willReturn($this->createVdbKeysResponse());
 
@@ -346,7 +346,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_generate_keys_for_team_throws_exception_when_llm_key_generation_fails(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('generateLlmKeys')
             ->willThrowException(new AmazeeAiClientException('LLM key generation failed'));
 
@@ -364,7 +364,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_generate_keys_for_team_throws_exception_when_vdb_key_generation_fails(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('generateLlmKeys')
             ->willReturn($this->createLlmKeysResponse());
         $mockClient->method('generateVdbKeys')
@@ -384,7 +384,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_get_team_details_successfully_retrieves_team_details(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('getTeam')->willReturn($this->createTeamResponse());
 
         $reflection = new ReflectionClass($this->testClass);
@@ -401,7 +401,7 @@ class UsesAmazeeAiTest extends TestCase
 
     public function test_get_team_details_throws_exception_when_team_retrieval_fails(): void
     {
-        $mockClient = $this->createMock(\Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
         $mockClient->method('getTeam')
             ->willThrowException(new AmazeeAiClientException('Team not found'));
 

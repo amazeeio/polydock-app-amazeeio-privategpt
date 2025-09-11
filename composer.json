@@ -1,11 +1,11 @@
 {
-  "name": "amazeelabs/polydock-app-amazeeio-privategpt",
+  "name": "amazeeio/polydock-app-amazeeio-privategpt",
   "description": "Polydock App - amazee.io PrivateGPT with Direct API Integration",
   "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Amazeelabs\\PolydockAppAmazeeioPrivateGpt\\": "src/"
+      "Amazeeio\\PolydockAppAmazeeioPrivateGpt\\": "src/"
     }
   },
   "autoload-dev": {

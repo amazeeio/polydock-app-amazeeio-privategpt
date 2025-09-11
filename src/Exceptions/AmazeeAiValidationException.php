@@ -1,6 +1,6 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions;
 
 use CuyZ\Valinor\Mapper\MappingError;
 

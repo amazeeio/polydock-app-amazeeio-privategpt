@@ -1,15 +1,15 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\Create\CreateAppInstanceTrait;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\Create\PostCreateAppInstanceTrait;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\Create\PreCreateAppInstanceTrait;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\CreateAppInstanceTrait;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PostCreateAppInstanceTrait;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PreCreateAppInstanceTrait;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
 use FreedomtechHosting\FtLagoonPhp\Client as LagoonClient;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppBase;

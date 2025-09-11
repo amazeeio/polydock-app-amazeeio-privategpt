@@ -1,11 +1,11 @@
 <?php
 
-namespace Amazeelabs\PolydockAppAmazeeioPrivateGpt\Traits;
+namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits;
 
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
-use Amazeelabs\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 
@@ -128,7 +128,7 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, llm_keys: \Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeelabs\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
