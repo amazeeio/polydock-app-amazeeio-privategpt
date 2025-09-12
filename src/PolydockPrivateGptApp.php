@@ -9,7 +9,7 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\CreateAppInstanceTrait;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PostCreateAppInstanceTrait;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PreCreateAppInstanceTrait;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAiDevmode;
 use FreedomtechHosting\FtLagoonPhp\Client as LagoonClient;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppBase;
@@ -60,7 +60,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
     use PreUpgradeAppInstanceTrait;
     use RemoveAppInstanceTrait;
     use UpgradeAppInstanceTrait;
-    use UsesAmazeeAi;
+    use UsesAmazeeAiDevmode;
 
     protected bool $requiresAiInfrastructure = true;
 

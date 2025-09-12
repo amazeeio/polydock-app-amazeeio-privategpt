@@ -8,7 +8,7 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAiDevmode;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 use Mockery;
 use ReflectionClass;
@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class TestClassWithUsesAmazeeAi
 {
-    use UsesAmazeeAi;
+    use UsesAmazeeAiDevmode;
 }
 
 class UsesAmazeeAiTest extends TestCase
@@ -103,6 +103,22 @@ class UsesAmazeeAiTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    /**
+     * @throws PolydockAppInstanceStatusFlowException
+     * 
+     * This is a simple test to make sure that when we initialize devmode we're not hitting the real API.
+     * TODO: this could be expanded quite significantly to cover all the methods in the trait.
+     * 
+     */
+    public function test_devmode_overrides_api_calls(): void
+    {
+        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $this->testClass->setAmazeeAiClientDevMode();
+        /** @var TeamResponse $teamResponse */
+        $teamResponse = $this->testClass->createTeamAndSetupAdministrator($appInstance);
+        $this->assertSame('devmode-name', $teamResponse->name);
     }
 
     public function test_set_amazee_ai_direct_client_from_app_instance_successfully_sets_amazee_ai_client_when_all_parameters_are_provided(): void
