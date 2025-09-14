@@ -128,8 +128,12 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         $this->setupPostCreateTrait($this, $this, $this);
 
         $lagoonClientProvider = $engine->getPolydockServiceProviderSingletonInstance('PolydockServiceProviderFTLagoon');
-        if (! $lagoonClientProvider instanceof LagoonClientProviderInterface) {
-            throw new PolydockAppInstanceStatusFlowException('Lagoon client provider is not an instance of LagoonClientProviderInterface');
+
+        // TODO: BMK this doesn't use the correct interfaces - we need to fix this globally.
+        // The hack was to replace LagoonClientProviderInterface with PolydockServiceProviderInterface
+        // This is not acceptable long term, or even beyond the week of the 15 of September 2025.
+        if (! $lagoonClientProvider instanceof PolydockServiceProviderInterface) {
+            throw new PolydockAppInstanceStatusFlowException('Lagoon client provider is not an instance of PolydockServiceProviderInterface');
         }
         $this->lagoonClientProvider = $lagoonClientProvider;
 
