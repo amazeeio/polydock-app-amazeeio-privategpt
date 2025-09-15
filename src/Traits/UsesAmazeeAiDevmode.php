@@ -38,7 +38,7 @@ trait UsesAmazeeAiDevmode
         getTeamDetails as private originalGetTeamDetails;
     }
 
-    protected ?bool $devModeOverride = false;
+    protected ?bool $devModeOverride = true;
 
     /**
      * Set the whole Client into Dev mode
@@ -85,6 +85,9 @@ trait UsesAmazeeAiDevmode
 
     public function pingAmazeeAi(): bool
     {
+        if ($this->devModeOverride) {
+            return true;
+        }
         return $this->originalPingAmazeeAi();
     }
 
