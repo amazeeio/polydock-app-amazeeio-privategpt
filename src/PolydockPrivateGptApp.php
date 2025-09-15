@@ -404,4 +404,59 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         // Delegate to parent class logging (inherited from PolydockAppBase)
         return parent::error($message, $context);
     }
+
+
+    /**
+     ** NOTE: The following two methods _should_ have been pulled from an upstream class
+     ** The next step there will be to refactor the upstream class to use these methods in a trait
+     ** so that we can avoid code duplication.
+     */
+    public function validateLagoonPingAndThrowExceptionIfFailed($logContext = []): void
+    {
+        $ping = $this->pingLagoonAPI();
+        if(!$ping) {
+            $this->error('Lagoon API ping failed', $logContext);
+            throw new PolydockAppInstanceStatusFlowException('Lagoon API ping failed');
+        }
+    }
+
+    public function validateAppInstanceStatusIsExpectedAndConfigureLagoonClientAndVerifyLagoonValues(
+        PolydockAppInstanceInterface $appInstance,
+        PolydockAppInstanceStatus $expectedStatus,
+        $logContext = [],
+        bool $testLagoonPing = true,
+        bool $verifyLagoonValuesAreAvailable = true,
+        bool $verifyLagoonProjectNameIsAvailable = true,
+        bool $verifyLagoonProjectIdIsAvailable = true
+    ): void
+    {
+        $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus, $logContext);
+        $this->setLagoonClientFromAppInstance($appInstance, $logContext);
+
+        if($testLagoonPing) {
+            $this->validateLagoonPingAndThrowExceptionIfFailed($appInstance);
+            $this->info('Lagoon API ping successful', $logContext);
+        }
+
+        if($verifyLagoonValuesAreAvailable) {
+            if(!$this->verifyLagoonValuesAreAvailable($appInstance, $logContext)) {
+                $this->error('Required Lagoon values not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Required Lagoon values not available');
+            }
+        }
+
+        if($verifyLagoonProjectNameIsAvailable) {
+            if(!$this->verifyLagoonProjectNameIsAvailable($appInstance, $logContext)) {
+                $this->error('Lagoon project name not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Lagoon project name not available');
+            }
+        }
+
+        if($verifyLagoonProjectIdIsAvailable) {
+            if(!$this->verifyLagoonProjectIdIsAvailable($appInstance, $logContext)) {
+                $this->error('Lagoon project id not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Lagoon project id not available');
+            }
+        }
+    }
 }
