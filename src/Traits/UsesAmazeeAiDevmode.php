@@ -38,7 +38,7 @@ trait UsesAmazeeAiDevmode
         getTeamDetails as private originalGetTeamDetails;
     }
 
-    protected ?bool $devModeOverride = true;
+    protected ?bool $devModeOverride = false;
 
     /**
      * Set the whole Client into Dev mode

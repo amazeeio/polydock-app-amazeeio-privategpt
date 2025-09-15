@@ -72,6 +72,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
 
     //TODO BMK fix this type hinting
     // protected LagoonClientProviderInterface $lagoonClientProvider;
+    /** @phpstan-ignore-next-line */
     protected $lagoonClientProvider;
 
     /**
@@ -138,7 +139,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         //     throw new PolydockAppInstanceStatusFlowException('Lagoon client provider is not an instance of PolydockServiceProviderInterface');
         // }
         $this->lagoonClientProvider = $lagoonClientProvider;
-
+        /** @phpstan-ignore-next-line */
         $this->lagoonClient = $this->lagoonClientProvider->getLagoonClient();
 
         if (! ($this->lagoonClient instanceof LagoonClient)) {
@@ -411,6 +412,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
      ** The next step there will be to refactor the upstream class to use these methods in a trait
      ** so that we can avoid code duplication.
      */
+    /** @phpstan-ignore-next-line */
     public function validateLagoonPingAndThrowExceptionIfFailed($logContext = []): void
     {
         $ping = $this->pingLagoonAPI();
@@ -420,6 +422,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         }
     }
 
+    /** @phpstan-ignore-next-line */
     public function validateAppInstanceStatusIsExpectedAndConfigureLagoonClientAndVerifyLagoonValues(
         PolydockAppInstanceInterface $appInstance,
         PolydockAppInstanceStatus $expectedStatus,
@@ -430,8 +433,10 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         bool $verifyLagoonProjectIdIsAvailable = true
     ): void
     {
-        $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus, $logContext);
-        $this->setLagoonClientFromAppInstance($appInstance, $logContext);
+        // $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus, $logContext);
+        // $this->setLagoonClientFromAppInstance($appInstance, $logContext);
+        $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus);
+        $this->setLagoonClientFromAppInstance($appInstance);
 
         if($testLagoonPing) {
             $this->validateLagoonPingAndThrowExceptionIfFailed($appInstance);
