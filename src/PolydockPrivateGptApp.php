@@ -92,6 +92,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
             new PolydockAppVariableDefinitionBase('amazee-ai-backend-token'),
             new PolydockAppVariableDefinitionBase('amazee-ai-backend-url'),
             new PolydockAppVariableDefinitionBase('amazee-ai-admin-email'),
+            // new PolydockAppVariableDefinitionBase('amazee-ai-in-dev-mode'),
         ];
     }
 
@@ -125,7 +126,19 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         $this->engine = $engine;
 
         // Setup trait dependencies
+        
+        // Here we check if we're in dev mode ...
+        if ($appInstance->getKeyValue('amazee-ai-in-dev-mode') === 'true') {
+            $this->debug('App instance indicates Amazee AI client should be in dev mode');
+            $this->setAmazeeAiClientDevMode();
+        } else {
+            $this->debug('App instance indicates Amazee AI client should NOT be in dev mode');
+        }
+        
         $this->setupAmazeeAiTrait($this);
+        
+        $this->setupAmazeeAiTrait($this);
+        
         $this->setupCreateTrait($this, $this, $this);
         $this->setupPreCreateTrait($this, $this, $this);
         $this->setupPostCreateTrait($this, $this, $this);
