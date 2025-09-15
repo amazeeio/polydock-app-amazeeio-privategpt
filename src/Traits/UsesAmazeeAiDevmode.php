@@ -3,30 +3,16 @@
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
-
 
 /**
  * Trait UsesAmazeeAiDevmode
- * @package Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits
- * 
- * This trait extends the UsesAmazeeAi trait to provide a development mode.
- * When devModeOverride is set to true, the trait will bypass actual API calls
- * and return mock data instead. This is useful for testing and development
- * environments where interaction with the real amazee.ai API is not desired.
- * 
- * TODO: we can probably make this something like a mock and inject values to be returned
- *      alternatively, we change the entire thing to skip the api under
- *      certain conditions.
  */
 trait UsesAmazeeAiDevmode
 {
-
     use UsesAmazeeAi {
         setupAmazeeAiTrait as private originalSetupAmazeeAiTrait;
         ensureAmazeeAiTraitInitialized as private originalEnsureAmazeeAiTraitInitialized;
@@ -43,7 +29,8 @@ trait UsesAmazeeAiDevmode
     /**
      * Set the whole Client into Dev mode
      */
-    public function setAmazeeAiClientDevMode(): void {
+    public function setAmazeeAiClientDevMode(): void
+    {
         $this->devModeOverride = true;
     }
 
@@ -88,14 +75,16 @@ trait UsesAmazeeAiDevmode
         if ($this->devModeOverride) {
             return true;
         }
+
         return $this->originalPingAmazeeAi();
     }
 
     public function createTeamAndSetupAdministrator(PolydockAppInstanceInterface $appInstance): TeamResponse
     {
         if ($this->devModeOverride) {
-            return new TeamResponse("devmode-name", "devmode-email@example.com", 1, true, true, new \DateTimeImmutable());
+            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, new \DateTimeImmutable);
         }
+
         return $this->originalCreateTeamAndSetupAdministrator($appInstance);
     }
 
@@ -108,17 +97,19 @@ trait UsesAmazeeAiDevmode
             return [
                 'team_id' => 'devmode-team-id',
                 'llm_keys' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse(1),
-                'vdb_keys' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse(1, "token", "https://api.example.com", "region", "name"),
+                'vdb_keys' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse(1, 'token', 'https://api.example.com', 'region', 'name'),
             ];
         }
+
         return $this->originalGenerateKeysForTeam($appInstance, $teamId);
     }
 
     public function getTeamDetails(string $teamId): TeamResponse
     {
         if ($this->devModeOverride) {
-            return new TeamResponse("devmode-name", "devmode-email@example.com", 1, true, true, new \DateTimeImmutable());
+            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, new \DateTimeImmutable);
         }
+
         return $this->originalGetTeamDetails($teamId);
     }
 }

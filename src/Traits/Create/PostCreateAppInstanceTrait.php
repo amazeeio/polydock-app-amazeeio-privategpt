@@ -129,10 +129,10 @@ trait PostCreateAppInstanceTrait
                 $credentials = json_decode($teamCredentials, true);
                 if (isset($credentials['llm_keys']) && isset($credentials['vdb_keys'])) {
                     foreach ($credentials['llm_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value ?: "unset", 'GLOBAL');
+                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
                     }
                     foreach ($credentials['vdb_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value ?: "unset", 'GLOBAL');
+                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
                     }
                 }
             }

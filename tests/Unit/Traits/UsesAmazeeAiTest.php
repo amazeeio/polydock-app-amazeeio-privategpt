@@ -107,10 +107,9 @@ class UsesAmazeeAiTest extends TestCase
 
     /**
      * @throws PolydockAppInstanceStatusFlowException
-     * 
+     *
      * This is a simple test to make sure that when we initialize devmode we're not hitting the real API.
      * TODO: this could be expanded quite significantly to cover all the methods in the trait.
-     * 
      */
     public function test_devmode_overrides_api_calls(): void
     {
