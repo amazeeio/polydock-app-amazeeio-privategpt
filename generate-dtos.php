@@ -22,6 +22,7 @@ $modelsToGenerate = [
     'User' => 'AdministratorResponse',
     'PrivateAIKey' => 'LlmKeysResponse', // for LLM keys
     'LiteLLMToken' => 'VdbKeysResponse',  // for VDB keys
+    'Region' => 'RegionResponse',
 ];
 
 function phpType($propSchema, $isNullable = false): string

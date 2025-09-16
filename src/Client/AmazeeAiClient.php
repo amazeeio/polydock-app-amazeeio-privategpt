@@ -7,6 +7,7 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationExceptio
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\RegionResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use CuyZ\Valinor\Mapper\MappingError;
@@ -122,6 +123,53 @@ class AmazeeAiClient
         } catch (RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to add team administrator: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    /**
+     * @return RegionResponse[]
+     */
+    public function getRegions(): array
+    {
+        try {
+            $response = $this->httpClient->request('GET', '/regions');
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            // Assuming $data is an array of regions
+            return array_map(
+                fn ($region) => $this->mapResponse(RegionResponse::class, $region),
+                $data
+            );
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to get regions: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    public function createLlmKey(int $teamId, int $regionId): LlmKeysResponse
+    {
+        try {
+            $response = $this->httpClient->request('POST', '/private-ai-keys/token', [
+                'json' => [
+                    'team_id' => $teamId,
+                    'region_id' => $regionId,
+                    'name' => sprintf('llm-%d-%d', $regionId, $teamId),
+                ],
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $this->mapResponse(LlmKeysResponse::class, $data);
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to generate LLM keys: '.$e->getMessage(),
                 $e->getCode(),
                 $e
             );
