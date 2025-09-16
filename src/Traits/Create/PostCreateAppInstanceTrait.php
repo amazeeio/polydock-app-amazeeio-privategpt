@@ -132,11 +132,11 @@ trait PostCreateAppInstanceTrait
 
             if ($teamCredentials) {
                 $credentials = json_decode($teamCredentials, true);
-                if (isset($credentials['llm_key'])) {
-                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']->litellm_token, 'GLOBAL');
+                if (isset($credentials['llm_key']) && isset($credentials['llm_key']['litellm_token'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']['litellm_token'], 'GLOBAL');
                 }
-                if (isset($credentials['backend_key'])) {
-                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']->token, 'GLOBAL');
+                if (isset($credentials['backend_key']) && isset($credentials['backend_key']['token'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']['token'], 'GLOBAL');
                 }
             }
 
