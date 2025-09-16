@@ -6,6 +6,7 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * HealthResponse
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
+ *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class HealthResponse
@@ -29,6 +30,7 @@ final readonly class HealthResponse
         public int $uptime,
         /**
          * Service status details
+         *
          * @var array<string, mixed>|null
          */
         public ?array $services = null
