@@ -128,7 +128,7 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
@@ -138,16 +138,17 @@ trait UsesAmazeeAi
         $logContext['team_id'] = $teamId;
 
         try {
-            $this->amazeeAiLogger?->info('Generating LLM keys for team', $logContext);
-            $llmKeys = $this->getAmazeeAiClient()->generateLlmKeys($teamId);
+            // $this->amazeeAiLogger?->info('Generating LLM keys for team', $logContext);
+            // $llmKeys = $this->getAmazeeAiClient()->generateLlmKeys($teamId);
 
-            $this->amazeeAiLogger?->info('Generating VDB keys for team', $logContext);
-            $vdbKeys = $this->getAmazeeAiClient()->generateVdbKeys($teamId);
+            // $this->amazeeAiLogger?->info('Generating VDB keys for team', $logContext);
+            // $vdbKeys = $this->getAmazeeAiClient()->generateVdbKeys($teamId);
 
             $credentials = [
                 'team_id' => $teamId,
-                'llm_keys' => $llmKeys,
-                'vdb_keys' => $vdbKeys,
+                'backend_key' => $this->getAmazeeAiClient()->createBackendKey(intval($teamId)),
+                // 'llm_keys' => $llmKeys,
+                // 'vdb_keys' => $vdbKeys,
             ];
 
             $this->amazeeAiLogger?->info('Keys generated successfully for team', $logContext);

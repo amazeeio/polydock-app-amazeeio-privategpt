@@ -89,15 +89,14 @@ trait UsesAmazeeAiDevmode
     }
 
     /**
-     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
         if ($this->devModeOverride) {
             return [
                 'team_id' => 'devmode-team-id',
-                'llm_keys' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse(1),
-                'vdb_keys' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse(1, 'token', 'https://api.example.com', 'region', 'name'),
+                'backend_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
             ];
         }
 
