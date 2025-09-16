@@ -15,24 +15,6 @@ final readonly class HealthResponse
         /**
          * Health status
          */
-        public string $status,
-        /**
-         * Timestamp
-         */
-        public string $timestamp,
-        /**
-         * API version
-         */
-        public string $version,
-        /**
-         * Uptime in seconds
-         */
-        public int $uptime,
-        /**
-         * Service status details
-         *
-         * @var array<string, mixed>|null
-         */
-        public ?array $services = null
+        public string $status
     ) {}
 }
