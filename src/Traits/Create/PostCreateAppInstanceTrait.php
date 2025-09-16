@@ -104,8 +104,8 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_EMAIL', $appInstance->getKeyValue('user-email'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_APP_INSTANCE_HEALTH_WEBHOOK_URL', $appInstance->getKeyValue('polydock-app-instance-health-webhook-url'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_FEATURE_FLAG_INSIGHTS', 'false', 'GLOBAL');
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_GHCR_USERNAME', $appInstance->getKeyValue('registry-ghcr-username'), 'CONTAINER_REGISTRY');
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_GHCR_PASSWORD', $appInstance->getKeyValue('registry-ghcr-password'), 'CONTAINER_REGISTRY');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_GHCR_USERNAME', $appInstance->getKeyValue('amazee-ai-registry-ghcr-username'), 'CONTAINER_REGISTRY');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_GHCR_PASSWORD', $appInstance->getKeyValue('amazee-ai-registry-ghcr-password'), 'CONTAINER_REGISTRY');
 
             // Set the user's selected region information from the store
             /** @phpstan-ignore-next-line */
