@@ -89,6 +89,24 @@ class AmazeeAiClient
         }
     }
 
+    // Adding this simply for downstream convenience.
+    public function deleteTeam(string $teamId): string
+    {
+        try {
+            $response = $this->httpClient->request('DELETE', "/teams/{$teamId}");
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $data['message'];
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to delete team: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
     public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
     {
         try {
