@@ -127,17 +127,20 @@ trait PostCreateAppInstanceTrait
             }
 
             $teamCredentials = $appInstance->getKeyValue('amazee-ai-team-credentials');
-            if ($teamCredentials) {
-                $credentials = json_decode($teamCredentials, true);
-                if (isset($credentials['llm_keys']) && isset($credentials['vdb_keys'])) {
-                    foreach ($credentials['llm_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
-                    }
-                    foreach ($credentials['vdb_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
-                    }
-                }
-            }
+
+            // TODO: add the correct credentials to the project variables
+
+            // if ($teamCredentials) {
+            //     $credentials = json_decode($teamCredentials, true);
+            //     if (isset($credentials['llm_keys']) && isset($credentials['vdb_keys'])) {
+            //         foreach ($credentials['llm_keys'] as $key => $value) {
+            //             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
+            //         }
+            //         foreach ($credentials['vdb_keys'] as $key => $value) {
+            //             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
+            //         }
+            //     }
+            // }
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 

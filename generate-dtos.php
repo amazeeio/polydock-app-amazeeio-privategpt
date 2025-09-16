@@ -22,7 +22,8 @@ $modelsToGenerate = [
     'User' => 'AdministratorResponse',
     'PrivateAIKey' => 'LlmKeysResponse', // for LLM keys
     'LiteLLMToken' => 'VdbKeysResponse',  // for VDB keys
-    // 'Region' => 'RegionResponse', // we're skipping this because it seems to have nullable fields that are not marked as such in the spec
+    'Region' => 'RegionResponse',
+    'APIToken' => 'APIToken',
 ];
 
 function phpType($propSchema, $isNullable = false): string

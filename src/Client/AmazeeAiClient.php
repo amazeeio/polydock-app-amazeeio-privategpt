@@ -5,6 +5,7 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Client;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\RegionResponse;
@@ -85,6 +86,27 @@ class AmazeeAiClient
         } catch (RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to create team: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    public function createBackendKey(int $teamId): APIToken
+    {
+        try {
+            $response = $this->httpClient->request('POST', '/auth/token', [
+                'json' => [
+                    'name' => sprintf('private-gpt-backend-%d', $teamId),
+                ],
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $this->mapResponse(APIToken::class, $data);
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to generate backend key: '.$e->getMessage(),
                 $e->getCode(),
                 $e
             );
