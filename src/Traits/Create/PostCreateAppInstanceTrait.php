@@ -128,7 +128,19 @@ trait PostCreateAppInstanceTrait
 
             $teamCredentials = $appInstance->getKeyValue('amazee-ai-team-credentials');
 
-            // TODO: add the correct credentials to the project variables
+            // These seem to be the keys injected from the amazee.ai operations
+
+            if ($teamCredentials) {
+                $credentials = json_decode($teamCredentials, true);
+                if (isset($credentials['llm_key'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']->litellm_token, 'GLOBAL');
+                }
+                if (isset($credentials['backend_key'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']->token, 'GLOBAL');
+                }
+            }
+
+            // TODO: I need to work out the region part of this
 
             // if ($teamCredentials) {
             //     $credentials = json_decode($teamCredentials, true);
