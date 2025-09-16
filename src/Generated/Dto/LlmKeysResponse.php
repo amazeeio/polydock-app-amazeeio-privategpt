@@ -51,7 +51,7 @@ final readonly class LlmKeysResponse
         /**
          * Created At
          */
-        public ?\DateTimeInterface $created_at = null,
+        public ?string $created_at = null,
         /**
          * Owner Id
          */

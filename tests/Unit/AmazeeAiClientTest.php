@@ -354,14 +354,6 @@ class AmazeeAiClientTest extends TestCase
     {
         $healthResponse = [
             'status' => 'healthy',
-            'timestamp' => '2024-01-01T00:00:00Z',
-            'version' => '1.0.0',
-            'uptime' => 3600,
-            'services' => [
-                'llm_api' => ['status' => 'healthy', 'response_time_ms' => 10],
-                'vector_db' => ['status' => 'healthy', 'response_time_ms' => 5],
-                'auth_service' => ['status' => 'healthy', 'response_time_ms' => 3],
-            ],
         ];
 
         $mock = new MockHandler([
@@ -382,14 +374,6 @@ class AmazeeAiClientTest extends TestCase
     {
         $healthResponse = [
             'status' => 'unhealthy',
-            'timestamp' => '2024-01-01T00:00:00Z',
-            'version' => '1.0.0',
-            'uptime' => 3600,
-            'services' => [
-                'llm_api' => ['status' => 'unhealthy', 'response_time_ms' => 1000],
-                'vector_db' => ['status' => 'healthy', 'response_time_ms' => 5],
-                'auth_service' => ['status' => 'healthy', 'response_time_ms' => 3],
-            ],
         ];
 
         $mock = new MockHandler([

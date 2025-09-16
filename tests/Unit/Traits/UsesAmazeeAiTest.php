@@ -49,8 +49,8 @@ class UsesAmazeeAiTest extends TestCase
             id: 123,
             is_active: true,
             is_always_free: false,
-            created_at: new \DateTimeImmutable('2024-01-01T00:00:00Z'),
-            updated_at: new \DateTimeImmutable('2024-01-01T00:00:00Z'),
+            created_at: '2024-01-01T00:00:00Z',
+            updated_at: '2024-01-01T00:00:00Z',
             last_payment: null
         );
     }
@@ -80,7 +80,7 @@ class UsesAmazeeAiTest extends TestCase
             litellm_token: 'llm-key-abc123def456',
             litellm_api_url: 'https://api.llm.amazee.ai/v1',
             region: 'us-east-1',
-            created_at: new \DateTimeImmutable('2024-01-01T00:00:00Z'),
+            created_at: '2024-01-01T00:00:00Z',
             owner_id: 1,
             team_id: 123
         );

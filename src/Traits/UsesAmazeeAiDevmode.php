@@ -82,7 +82,7 @@ trait UsesAmazeeAiDevmode
     public function createTeamAndSetupAdministrator(PolydockAppInstanceInterface $appInstance): TeamResponse
     {
         if ($this->devModeOverride) {
-            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, new \DateTimeImmutable);
+            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, '');
         }
 
         return $this->originalCreateTeamAndSetupAdministrator($appInstance);
@@ -107,7 +107,7 @@ trait UsesAmazeeAiDevmode
     public function getTeamDetails(string $teamId): TeamResponse
     {
         if ($this->devModeOverride) {
-            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, new \DateTimeImmutable);
+            return new TeamResponse('devmode-name', 'devmode-email@example.com', 1, true, true, '');
         }
 
         return $this->originalGetTeamDetails($teamId);
