@@ -70,7 +70,7 @@ class AmazeeAiClient
     public function createTeam(string $name, string $adminEmail): TeamResponse
     {
         try {
-            $response = $this->httpClient->request('POST', '/v1/teams', [
+            $response = $this->httpClient->request('POST', '/teams', [
                 'json' => [
                     'name' => $name,
                     'admin_email' => $adminEmail,
@@ -92,7 +92,7 @@ class AmazeeAiClient
     public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
     {
         try {
-            $response = $this->httpClient->request('POST', "/v1/teams/{$teamId}/administrators", [
+            $response = $this->httpClient->request('POST', "/teams/{$teamId}/administrators", [
                 'json' => [
                     'email' => $email,
                 ],
