@@ -89,7 +89,7 @@ trait UsesAmazeeAiDevmode
     }
 
     /**
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
@@ -97,6 +97,7 @@ trait UsesAmazeeAiDevmode
             return [
                 'team_id' => 'devmode-team-id',
                 'backend_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
+                'llm_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse(1, 'database-name-here', 'llmkey-name', 'database-host', 'database-username', 'database-password', 'litellm-token', 'litellm-api-url', 'region-name', 'created-at', 1, 1),
             ];
         }
 

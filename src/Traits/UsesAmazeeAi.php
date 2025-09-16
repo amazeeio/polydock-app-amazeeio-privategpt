@@ -128,11 +128,16 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
         $this->ensureAmazeeAiTraitInitialized();
+
+        $llmRegionId = $appInstance->getKeyValue('amazee-ai-llm-region-id');
+        if (empty($llmRegionId)) {
+            throw new PolydockAppInstanceStatusFlowException('amazee.ai LLM region is required to generate LLM keys');
+        }
 
         $logContext = $this->amazeeAiLogger?->getLogContext(__FUNCTION__) ?? [];
         $logContext['team_id'] = $teamId;
@@ -147,6 +152,7 @@ trait UsesAmazeeAi
             $credentials = [
                 'team_id' => $teamId,
                 'backend_key' => $this->getAmazeeAiClient()->createBackendKey(intval($teamId)),
+                'llm_key' => $this->getAmazeeAiClient()->createLlmKey(intval($teamId), intval($llmRegionId)),
                 // 'llm_keys' => $llmKeys,
                 // 'vdb_keys' => $vdbKeys,
             ];
