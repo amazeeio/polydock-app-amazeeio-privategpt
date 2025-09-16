@@ -44,6 +44,7 @@ class AmazeeAiClient
         $this->mapper = (new MapperBuilder)
             ->allowSuperfluousKeys()
             ->allowPermissiveTypes()
+            ->allowUndefinedValues() // To handle missing nullable fields gracefully
             ->mapper();
     }
 
