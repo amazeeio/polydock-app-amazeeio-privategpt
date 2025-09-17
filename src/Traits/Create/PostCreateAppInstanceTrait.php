@@ -48,7 +48,8 @@ trait PostCreateAppInstanceTrait
     protected function generateSecurePassword(int $length = 32): string
     {
         // Generate a secure random password using URL-safe base64 encoding
-        $password = rtrim(strtr(base64_encode(random_bytes($length)), '+/', '-_'), '=');
+        $password = rtrim(strtr(base64_encode(random_bytes(max(1, $length))), '+/', '-_'), '=');
+
         return substr($password, 0, $length);
     }
 
@@ -152,20 +153,19 @@ trait PostCreateAppInstanceTrait
             }
 
             // Chainlit details - seems to be hardcoded
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_ID', "chainlit", 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_ID', 'chainlit', 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
 
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'MCP_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
 
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
 
-
             // Phoenix details
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_API_KEY', $appInstance->getKeyValue('amazee-ai-phoenix-api-key'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
 
-            // 
+            //
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
