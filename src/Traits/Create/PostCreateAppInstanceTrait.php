@@ -140,6 +140,15 @@ trait PostCreateAppInstanceTrait
                 }
             }
 
+            // Chainlit details - seems to be hardcoded
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_ID', "chainlit", 'GLOBAL');
+
+
+            // Phoenix details
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_API_KEY', $appInstance->getKeyValue('amazee-ai-phoenix-api-key'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
+
             // TODO: I need to work out the region part of this
 
             // if ($teamCredentials) {
