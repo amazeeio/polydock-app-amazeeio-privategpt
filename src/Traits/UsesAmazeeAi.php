@@ -129,7 +129,7 @@ trait UsesAmazeeAi
     {
         $this->ensureAmazeeAiTraitInitialized();
 
-        $llmRegionId = $appInstance->getKeyValue('amazee-ai-llm-region-id');
+        $llmRegionId = $appInstance->getKeyValue('amazee-ai-backend-region-id');
         if (empty($llmRegionId)) {
             throw new PolydockAppInstanceStatusFlowException('amazee.ai LLM region is required to generate LLM keys');
         }
