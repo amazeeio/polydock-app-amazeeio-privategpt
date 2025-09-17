@@ -3,7 +3,6 @@
 namespace Tests\Unit\Traits;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
@@ -54,50 +53,6 @@ class UsesAmazeeAiTest extends TestCase
             last_payment: null
         );
     }
-
-    private function createAdministratorResponse(): AdministratorResponse
-    {
-        return new AdministratorResponse(
-            email: 'admin@example.com',
-            id: 456,
-            is_active: true,
-            is_admin: true,
-            team_id: 123,
-            team_name: 'test-team',
-            role: 'administrator'
-        );
-    }
-
-    // private function createLlmKeysResponse(): LlmKeysResponse
-    // {
-    //     return new LlmKeysResponse(
-    //         id: 123,
-    //         database_name: 'test-db',
-    //         name: 'test-llm-key',
-    //         database_host: 'localhost',
-    //         database_username: 'user',
-    //         database_password: 'password',
-    //         litellm_token: 'llm-key-abc123def456',
-    //         litellm_api_url: 'https://api.llm.amazee.ai/v1',
-    //         region: 'us-east-1',
-    //         created_at: '2024-01-01T00:00:00Z',
-    //         owner_id: 1,
-    //         team_id: 123
-    //     );
-    // }
-
-    // private function createVdbKeysResponse(): VdbKeysResponse
-    // {
-    //     return new VdbKeysResponse(
-    //         id: 456,
-    //         litellm_token: 'vdb-key-xyz789uvw012',
-    //         litellm_api_url: 'https://api.vdb.amazee.ai/v1',
-    //         owner_id: 1,
-    //         team_id: 123,
-    //         region: 'us-east-1',
-    //         name: 'test-vdb-key'
-    //     );
-    // }
 
     protected function tearDown(): void
     {
@@ -240,31 +195,6 @@ class UsesAmazeeAiTest extends TestCase
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->expectExceptionMessage('Error pinging amazee.ai API: API Error');
         $this->testClass->pingAmazeeAi();
-    }
-
-    public function test_create_team_and_setup_administrator_successfully_creates_team_and_sets_up_administrator(): void
-    {
-        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-        $mockClient->method('createTeam')->willReturn($this->createTeamResponse());
-        $mockClient->method('addTeamAdministrator')->willReturn($this->createAdministratorResponse());
-
-        $reflection = new ReflectionClass($this->testClass);
-        $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->testClass, $mockClient);
-
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
-        $appInstance->method('getKeyValue')
-            ->willReturnMap([
-                ['lagoon-project-name', 'test-project'],
-                ['amazee-ai-admin-email', 'admin@example.com'],
-            ]);
-
-        $result = $this->testClass->createTeamAndSetupAdministrator($appInstance);
-
-        $this->assertInstanceOf(TeamResponse::class, $result);
-        $this->assertSame(123, $result->id);
-        $this->assertSame('test-team', $result->name);
     }
 
     public function test_create_team_and_setup_administrator_throws_exception_when_admin_email_is_missing(): void

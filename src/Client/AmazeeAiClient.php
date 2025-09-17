@@ -110,26 +110,26 @@ class AmazeeAiClient
         }
     }
 
-    public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
-    {
-        try {
-            $response = $this->httpClient->request('POST', "/teams/{$teamId}/administrators", [
-                'json' => [
-                    'email' => $email,
-                ],
-            ]);
+    // public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
+    // {
+    //     try {
+    //         $response = $this->httpClient->request('POST', "/teams/{$teamId}/administrators", [
+    //             'json' => [
+    //                 'email' => $email,
+    //             ],
+    //         ]);
 
-            $data = json_decode($response->getBody()->getContents(), true);
+    //         $data = json_decode($response->getBody()->getContents(), true);
 
-            return $this->mapResponse(AdministratorResponse::class, $data);
-        } catch (RequestException $e) {
-            throw new AmazeeAiClientException(
-                'Failed to add team administrator: '.$e->getMessage(),
-                $e->getCode(),
-                $e
-            );
-        }
-    }
+    //         return $this->mapResponse(AdministratorResponse::class, $data);
+    //     } catch (RequestException $e) {
+    //         throw new AmazeeAiClientException(
+    //             'Failed to add team administrator: '.$e->getMessage(),
+    //             $e->getCode(),
+    //             $e
+    //         );
+    //     }
+    // }
 
     /**
      * @return RegionResponse[]

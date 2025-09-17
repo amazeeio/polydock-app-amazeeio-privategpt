@@ -115,11 +115,6 @@ trait UsesAmazeeAi
 
             $this->amazeeAiLogger?->info('Team created successfully', $logContext + ['team' => $team]);
 
-            $this->amazeeAiLogger?->info('Setting up team administrator', $logContext);
-            $administrator = $this->getAmazeeAiClient()->addTeamAdministrator((string) $teamId, $adminEmail);
-
-            $this->amazeeAiLogger?->info('Team administrator set up successfully', $logContext + ['administrator' => $administrator]);
-
             return $team;
         } catch (AmazeeAiClientException $e) {
             $this->amazeeAiLogger?->error('Error creating team or setting up administrator: '.$e->getMessage(), $logContext);

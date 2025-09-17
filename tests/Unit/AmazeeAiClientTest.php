@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
@@ -132,52 +131,6 @@ class AmazeeAiClientTest extends TestCase
                 'admin_email' => 'admin@test.com',
             ], $requestBody);
         }
-    }
-
-    /**
-     * Test successful team administrator addition
-     */
-    public function test_add_administrator_success(): void
-    {
-        $responseData = [
-            'email' => 'admin@example.com',
-            'id' => 456,
-            'is_active' => true,
-            'is_admin' => true,
-            'team_id' => 123,
-            'team_name' => 'test-team',
-            'role' => 'administrator',
-        ];
-
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode($responseData) ?: ''),
-        ]);
-
-        $client = $this->createClientWithMockHandler($mock);
-
-        $result = $client->addTeamAdministrator('team-123', 'admin@example.com');
-
-        $this->assertInstanceOf(AdministratorResponse::class, $result);
-        $this->assertSame(456, $result->id);
-        $this->assertSame(123, $result->team_id);
-        $this->assertSame('admin@example.com', $result->email);
-        $this->assertSame('administrator', $result->role);
-    }
-
-    /**
-     * Test team administrator addition failure throws exception
-     */
-    public function test_add_administrator_failure(): void
-    {
-        $mock = new MockHandler([
-            new RequestException('Forbidden', new Request('POST', '/v1/teams/team-123/administrators')),
-        ]);
-
-        $client = $this->createClientWithMockHandler($mock);
-
-        $this->expectException(AmazeeAiClientException::class);
-        $this->expectExceptionMessage('Failed to add team administrator');
-        $client->addTeamAdministrator('team-123', 'admin@example.com');
     }
 
     /**
