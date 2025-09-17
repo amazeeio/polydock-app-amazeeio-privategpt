@@ -94,6 +94,12 @@ trait UsesAmazeeAiDevmode
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
         if ($this->devModeOverride) {
+
+            $llmRegionId = $appInstance->getKeyValue('amazee-ai-llm-region-id');
+            if (empty($llmRegionId)) {
+                throw new PolydockAppInstanceStatusFlowException('amazee.ai LLM region is required to generate LLM keys');
+            }
+
             return [
                 'team_id' => 'devmode-team-id',
                 'backend_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
