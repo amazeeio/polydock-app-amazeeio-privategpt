@@ -137,8 +137,6 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
 
         $this->setupAmazeeAiTrait($this);
 
-        $this->setupAmazeeAiTrait($this);
-
         $this->setupCreateTrait($this, $this, $this);
         $this->setupPreCreateTrait($this, $this, $this);
         $this->setupPostCreateTrait($this, $this, $this);
