@@ -45,6 +45,13 @@ trait PostCreateAppInstanceTrait
         }
     }
 
+    protected function generateSecurePassword(int $length = 32): string
+    {
+        // Generate a secure random password using URL-safe base64 encoding
+        $password = rtrim(strtr(base64_encode(random_bytes($length)), '+/', '-_'), '=');
+        return substr($password, 0, $length);
+    }
+
     public function postCreateAppInstance(PolydockAppInstanceInterface $appInstance): PolydockAppInstanceInterface
     {
         $this->ensurePostCreateTraitInitialized();
@@ -126,14 +133,18 @@ trait PostCreateAppInstanceTrait
                 $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_TEAM_ID', $teamId, 'GLOBAL');
             }
 
+            
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_DEFAULT_REGION_ID', $credentials['llm_key']['litellm_token'], 'GLOBAL');
+
             $teamCredentials = $appInstance->getKeyValue('amazee-ai-team-credentials');
-
             // These seem to be the keys injected from the amazee.ai operations
-
             if ($teamCredentials) {
                 $credentials = json_decode($teamCredentials, true);
                 if (isset($credentials['llm_key']) && isset($credentials['llm_key']['litellm_token'])) {
                     $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']['litellm_token'], 'GLOBAL');
+                }
+                if (isset($credentials['llm_key']) && isset($credentials['llm_key']['litellm_api_url'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_BASE_URL', $credentials['llm_key']['litellm_api_url'], 'GLOBAL');
                 }
                 if (isset($credentials['backend_key']) && isset($credentials['backend_key']['token'])) {
                     $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']['token'], 'GLOBAL');
@@ -142,6 +153,11 @@ trait PostCreateAppInstanceTrait
 
             // Chainlit details - seems to be hardcoded
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_ID', "chainlit", 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'MCP_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
 
 
             // Phoenix details
@@ -149,19 +165,7 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
 
-            // TODO: I need to work out the region part of this
-
-            // if ($teamCredentials) {
-            //     $credentials = json_decode($teamCredentials, true);
-            //     if (isset($credentials['llm_keys']) && isset($credentials['vdb_keys'])) {
-            //         foreach ($credentials['llm_keys'] as $key => $value) {
-            //             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
-            //         }
-            //         foreach ($credentials['vdb_keys'] as $key => $value) {
-            //             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value ?: 'unset', 'GLOBAL');
-            //         }
-            //     }
-            // }
+            // 
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
