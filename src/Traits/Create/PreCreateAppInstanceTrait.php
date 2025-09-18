@@ -85,12 +85,10 @@ trait PreCreateAppInstanceTrait
             $appInstance->storeKeyValue('amazee-ai-team-name', $team->name);
         }
 
-
         // Here we want to override the app admin username to the incoming registration email
         // TODO: this is quite nasty, and should be supported by polydock core
         $adminEmail = $appInstance->getKeyValue('user-email');
         $appInstance->storeKeyValue('lagoon-generate-app-admin-username', $adminEmail); // since this is saved below, let's see if this works.
-
 
         $this->preCreateLogger?->info($functionName.': completed', $logContext);
         $appInstance->setStatus(PolydockAppInstanceStatus::PRE_CREATE_COMPLETED, 'Pre-create completed')->save();

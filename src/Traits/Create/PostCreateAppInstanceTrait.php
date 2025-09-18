@@ -189,7 +189,7 @@ trait PostCreateAppInstanceTrait
 
             return $appInstance;
         }
-        
+
         $this->postCreateLogger?->info($functionName.': completed', $logContext);
         $appInstance->setStatus(PolydockAppInstanceStatus::POST_CREATE_COMPLETED, 'Post-create completed')->save();
 
