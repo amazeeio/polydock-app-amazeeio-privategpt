@@ -2,6 +2,7 @@
 
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create;
 
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Routemap\Routemapper;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
@@ -168,6 +169,12 @@ trait PostCreateAppInstanceTrait
             // Now let's create the routes
             $projectName = $appInstance->getKeyValue('lagoon-project-name');
             $deployTargetId = (int) $appInstance->getKeyValue('lagoon-deploy-region-id');
+            $drupalUrl = 'https://'.Routemapper::drupalUrl($deployTargetId, $projectName);
+            $chatUrl = 'https://'.Routemapper::chainlitUrl($deployTargetId, $projectName);
+            $routesBase64 = Routemapper::base64encodedRoutes($deployTargetId, $projectName);
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_ROUTES_JSON', $routesBase64, 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_URL', $drupalUrl, 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_URL', $chatUrl, 'GLOBAL');
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
