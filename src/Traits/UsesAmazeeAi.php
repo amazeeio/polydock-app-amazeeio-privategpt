@@ -97,7 +97,7 @@ trait UsesAmazeeAi
         $logContext = $this->amazeeAiLogger?->getLogContext(__FUNCTION__) ?? [];
 
         $projectName = $appInstance->getKeyValue('lagoon-project-name');
-        // $adminEmail = $appInstance->getKeyValue('amazee-ai-admin-email');
+        // we use the user-email from polydock registration as the amazee.ai admin email
         $adminEmail = $appInstance->getKeyValue('user-email');
 
         if (empty($adminEmail)) {

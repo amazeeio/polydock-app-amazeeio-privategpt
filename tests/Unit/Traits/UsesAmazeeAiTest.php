@@ -3,9 +3,7 @@
 namespace Tests\Unit\Traits;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAiDevmode;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
@@ -210,7 +208,7 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
-                ['amazee-ai-admin-email', ''], // Empty string represents missing value per interface contract
+                ['user-email', ''], // Empty string represents missing value per interface contract
             ]);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -233,7 +231,7 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
-                ['amazee-ai-admin-email', 'admin@example.com'],
+                ['user-email', 'admin@example.com'],
             ]);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -258,74 +256,13 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
-                ['amazee-ai-admin-email', 'admin@example.com'],
+                ['user-email', 'admin@example.com'],
             ]);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->expectExceptionMessage('Error creating team or setting up administrator: API validation failed');
         $this->testClass->createTeamAndSetupAdministrator($appInstance);
     }
-
-    // public function test_generate_keys_for_team_successfully_generates_llm_and_vdb_keys_for_team(): void
-    // {
-    //     $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-    //     $mockClient->method('generateLlmKeys')->willReturn($this->createLlmKeysResponse());
-    //     $mockClient->method('generateVdbKeys')->willReturn($this->createVdbKeysResponse());
-
-    //     $reflection = new ReflectionClass($this->testClass);
-    //     $property = $reflection->getProperty('amazeeAiClient');
-    //     $property->setAccessible(true);
-    //     $property->setValue($this->testClass, $mockClient);
-
-    //     $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
-
-    //     $result = $this->testClass->generateKeysForTeam($appInstance, 'team-123');
-
-    //     $this->assertIsArray($result);
-    //     // $this->assertSame('team-123', $result['team_id']);
-    //     // $this->assertInstanceOf(LlmKeysResponse::class, $result['llm_keys']);
-    //     // $this->assertInstanceOf(VdbKeysResponse::class, $result['vdb_keys']);
-    //     // $this->assertSame('llm-key-abc123def456', $result['llm_keys']->litellm_token);
-    //     // $this->assertSame('vdb-key-xyz789uvw012', $result['vdb_keys']->litellm_token);
-    // }
-
-    // public function test_generate_keys_for_team_throws_exception_when_llm_key_generation_fails(): void
-    // {
-    //     $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-    //     $mockClient->method('generateLlmKeys')
-    //         ->willThrowException(new AmazeeAiClientException('LLM key generation failed'));
-
-    //     $reflection = new ReflectionClass($this->testClass);
-    //     $property = $reflection->getProperty('amazeeAiClient');
-    //     $property->setAccessible(true);
-    //     $property->setValue($this->testClass, $mockClient);
-
-    //     $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
-
-    //     $this->expectException(PolydockAppInstanceStatusFlowException::class);
-    //     $this->expectExceptionMessage('Error generating keys for team: LLM key generation failed');
-    //     $this->testClass->generateKeysForTeam($appInstance, 'team-123');
-    // }
-
-    // public function test_generate_keys_for_team_throws_exception_when_vdb_key_generation_fails(): void
-    // {
-    //     $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-    //     $mockClient->method('generateLlmKeys')
-    //         ->willReturn($this->createLlmKeysResponse());
-    //     $mockClient->method('generateVdbKeys')
-    //         ->willThrowException(new AmazeeAiClientException('VDB key generation failed'));
-
-    //     $reflection = new ReflectionClass($this->testClass);
-    //     $property = $reflection->getProperty('amazeeAiClient');
-    //     $property->setAccessible(true);
-    //     $property->setValue($this->testClass, $mockClient);
-
-    //     $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
-
-    //     $this->expectException(PolydockAppInstanceStatusFlowException::class);
-    //     $this->expectExceptionMessage('Error generating keys for team: VDB key generation failed');
-    //     $this->testClass->generateKeysForTeam($appInstance, 'team-123');
-    // }
 
     public function test_get_team_details_successfully_retrieves_team_details(): void
     {
