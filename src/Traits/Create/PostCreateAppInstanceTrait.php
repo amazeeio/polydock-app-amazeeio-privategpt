@@ -176,6 +176,11 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_URL', $drupalUrl, 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_URL', $chatUrl, 'GLOBAL');
 
+            // Inject drupal defaults
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_USER', $appInstance->getKeyValue('user-email'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_PASSWORD', $appInstance->getKeyValue('user-password'), 'GLOBAL');
+
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
         } catch (\Exception $e) {
@@ -184,7 +189,7 @@ trait PostCreateAppInstanceTrait
 
             return $appInstance;
         }
-
+        
         $this->postCreateLogger?->info($functionName.': completed', $logContext);
         $appInstance->setStatus(PolydockAppInstanceStatus::POST_CREATE_COMPLETED, 'Post-create completed')->save();
 
