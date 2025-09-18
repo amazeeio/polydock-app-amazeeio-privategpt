@@ -165,7 +165,9 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
 
-            //
+            // Now let's create the routes
+            $projectName = $appInstance->getKeyValue('lagoon-project-name');
+            $deployTargetId = (int) $appInstance->getKeyValue('lagoon-deploy-region-id');
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
