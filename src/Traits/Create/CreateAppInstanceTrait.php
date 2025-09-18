@@ -104,6 +104,8 @@ trait CreateAppInstanceTrait
 
             $appInstance->storeKeyValue('lagoon-project-id', $createdProjectData['addProject']['id']);
 
+            $this->createAmazeeAiOps?->setAmazeeAiClientFromAppInstance($appInstance);
+
             $teamId = $appInstance->getKeyValue('amazee-ai-team-id');
             if ($teamId) {
                 $credentials = $this->createAmazeeAiOps?->generateKeysForTeam($appInstance, $teamId) ?? [];

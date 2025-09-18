@@ -20,7 +20,7 @@ interface AmazeeAiOperationsInterface
     /**
      * Generate keys for a team
      *
-     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array;
 }

@@ -3,42 +3,38 @@
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
 
 /**
- * AdministratorResponse
+ * APIToken
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
  *
  * @see https://api.amazee.ai/openapi.json
  */
-final readonly class AdministratorResponse
+final readonly class APIToken
 {
     public function __construct(
         /**
-         * Email
+         * Name
          */
-        public string $email,
+        public string $name,
         /**
          * Id
          */
         public int $id,
         /**
-         * Is Active
+         * Token
          */
-        public bool $is_active,
+        public string $token,
         /**
-         * Is Admin
+         * Created At
          */
-        public bool $is_admin,
+        public string $created_at,
         /**
-         * Team Id
+         * User Id
          */
-        public ?int $team_id = null,
+        public int $user_id,
         /**
-         * Team Name
+         * Last Used At
          */
-        public ?string $team_name = null,
-        /**
-         * Role
-         */
-        public ?string $role = null
+        public ?string $last_used_at = null
     ) {}
 }

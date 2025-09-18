@@ -54,7 +54,7 @@ The following variables must be configured in your Polydock Store:
 #### amazee.ai Direct API Configuration
 - `amazee-ai-api-key`: Your amazee.ai API key
 - `amazee-ai-api-url`: amazee.ai API URL (defaults to 'https://api.amazee.ai')
-- `amazee-ai-admin-email`: Email address for team administrator
+- `user-email`: Email address for team administrator - this comes from the polydock registration payload
 
 ## PrivateGPT Application Requirements
 

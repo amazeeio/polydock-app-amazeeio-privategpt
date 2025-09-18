@@ -5,8 +5,10 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Client;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\RegionResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use CuyZ\Valinor\Mapper\MappingError;
@@ -43,6 +45,7 @@ class AmazeeAiClient
         $this->mapper = (new MapperBuilder)
             ->allowSuperfluousKeys()
             ->allowPermissiveTypes()
+            ->allowUndefinedValues() // To handle missing nullable fields gracefully
             ->mapper();
     }
 
@@ -70,7 +73,7 @@ class AmazeeAiClient
     public function createTeam(string $name, string $adminEmail): TeamResponse
     {
         try {
-            $response = $this->httpClient->request('POST', '/v1/teams', [
+            $response = $this->httpClient->request('POST', '/teams', [
                 'json' => [
                     'name' => $name,
                     'admin_email' => $adminEmail,
@@ -89,21 +92,107 @@ class AmazeeAiClient
         }
     }
 
-    public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
+    // Adding this simply for downstream convenience.
+    public function deleteTeam(string $teamId): string
     {
         try {
-            $response = $this->httpClient->request('POST', "/v1/teams/{$teamId}/administrators", [
+            $response = $this->httpClient->request('DELETE', "/teams/{$teamId}");
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $data['message'];
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to delete team: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    // public function addTeamAdministrator(string $teamId, string $email): AdministratorResponse
+    // {
+    //     try {
+    //         $response = $this->httpClient->request('POST', "/teams/{$teamId}/administrators", [
+    //             'json' => [
+    //                 'email' => $email,
+    //             ],
+    //         ]);
+
+    //         $data = json_decode($response->getBody()->getContents(), true);
+
+    //         return $this->mapResponse(AdministratorResponse::class, $data);
+    //     } catch (RequestException $e) {
+    //         throw new AmazeeAiClientException(
+    //             'Failed to add team administrator: '.$e->getMessage(),
+    //             $e->getCode(),
+    //             $e
+    //         );
+    //     }
+    // }
+
+    /**
+     * @return RegionResponse[]
+     */
+    public function getRegions(): array
+    {
+        try {
+            $response = $this->httpClient->request('GET', '/regions');
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            // Assuming $data is an array of regions
+            return array_map(
+                fn ($region) => $this->mapResponse(RegionResponse::class, $region),
+                $data
+            );
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to get regions: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    public function createBackendKey(int $teamId): APIToken
+    {
+        try {
+            $response = $this->httpClient->request('POST', '/auth/token', [
                 'json' => [
-                    'email' => $email,
+                    'name' => sprintf('private-gpt-backend-%d', $teamId),
                 ],
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
 
-            return $this->mapResponse(AdministratorResponse::class, $data);
+            return $this->mapResponse(APIToken::class, $data);
         } catch (RequestException $e) {
             throw new AmazeeAiClientException(
-                'Failed to add team administrator: '.$e->getMessage(),
+                'Failed to generate backend key: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    public function createLlmKey(int $teamId, int $regionId): LlmKeysResponse
+    {
+        try {
+            $response = $this->httpClient->request('POST', '/private-ai-keys/token', [
+                'json' => [
+                    'team_id' => $teamId,
+                    'region_id' => $regionId,
+                    'name' => sprintf('llm-%d-%d', $regionId, $teamId),
+                ],
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $this->mapResponse(LlmKeysResponse::class, $data);
+        } catch (RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to generate LLM keys: '.$e->getMessage(),
                 $e->getCode(),
                 $e
             );

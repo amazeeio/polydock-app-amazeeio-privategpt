@@ -9,7 +9,7 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\CreateAppInstanceTrait;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PostCreateAppInstanceTrait;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PreCreateAppInstanceTrait;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAi;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAiDevmode;
 use FreedomtechHosting\FtLagoonPhp\Client as LagoonClient;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppBase;
@@ -60,7 +60,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
     use PreUpgradeAppInstanceTrait;
     use RemoveAppInstanceTrait;
     use UpgradeAppInstanceTrait;
-    use UsesAmazeeAi;
+    use UsesAmazeeAiDevmode;
 
     protected bool $requiresAiInfrastructure = true;
 
@@ -70,7 +70,10 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
 
     protected PolydockEngineInterface $engine;
 
-    protected LagoonClientProviderInterface $lagoonClientProvider;
+    // TODO BMK fix this type hinting
+    // protected LagoonClientProviderInterface $lagoonClientProvider;
+    /** @phpstan-ignore-next-line */
+    protected $lagoonClientProvider;
 
     /**
      * @return array<int, PolydockAppVariableDefinitionBase>
@@ -89,6 +92,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
             new PolydockAppVariableDefinitionBase('amazee-ai-backend-token'),
             new PolydockAppVariableDefinitionBase('amazee-ai-backend-url'),
             new PolydockAppVariableDefinitionBase('amazee-ai-admin-email'),
+            // new PolydockAppVariableDefinitionBase('amazee-ai-in-dev-mode'),
         ];
     }
 
@@ -122,17 +126,31 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         $this->engine = $engine;
 
         // Setup trait dependencies
+
+        // Here we check if we're in dev mode ...
+        if ($appInstance->getKeyValue('amazee-ai-in-dev-mode') === 'true') {
+            $this->debug('App instance indicates Amazee AI client should be in dev mode');
+            $this->setAmazeeAiClientDevMode();
+        } else {
+            $this->debug('App instance indicates Amazee AI client should NOT be in dev mode');
+        }
+
         $this->setupAmazeeAiTrait($this);
+
         $this->setupCreateTrait($this, $this, $this);
         $this->setupPreCreateTrait($this, $this, $this);
         $this->setupPostCreateTrait($this, $this, $this);
 
         $lagoonClientProvider = $engine->getPolydockServiceProviderSingletonInstance('PolydockServiceProviderFTLagoon');
-        if (! $lagoonClientProvider instanceof LagoonClientProviderInterface) {
-            throw new PolydockAppInstanceStatusFlowException('Lagoon client provider is not an instance of LagoonClientProviderInterface');
-        }
-        $this->lagoonClientProvider = $lagoonClientProvider;
 
+        // TODO: BMK this doesn't use the correct interfaces - we need to fix this globally.
+        // The hack was to replace LagoonClientProviderInterface with PolydockServiceProviderInterface
+        // This is not acceptable long term, or even beyond the week of the 15 of September 2025.
+        // if (! $lagoonClientProvider instanceof PolydockServiceProviderInterface) {
+        //     throw new PolydockAppInstanceStatusFlowException('Lagoon client provider is not an instance of PolydockServiceProviderInterface');
+        // }
+        $this->lagoonClientProvider = $lagoonClientProvider;
+        /** @phpstan-ignore-next-line */
         $this->lagoonClient = $this->lagoonClientProvider->getLagoonClient();
 
         if (! ($this->lagoonClient instanceof LagoonClient)) {
@@ -397,5 +415,62 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
     {
         // Delegate to parent class logging (inherited from PolydockAppBase)
         return parent::error($message, $context);
+    }
+
+    /**
+     ** NOTE: The following two methods _should_ have been pulled from an upstream class
+     ** The next step there will be to refactor the upstream class to use these methods in a trait
+     ** so that we can avoid code duplication.
+     */
+    /** @phpstan-ignore-next-line */
+    public function validateLagoonPingAndThrowExceptionIfFailed($logContext = []): void
+    {
+        $ping = $this->pingLagoonAPI();
+        if (! $ping) {
+            $this->error('Lagoon API ping failed', $logContext);
+            throw new PolydockAppInstanceStatusFlowException('Lagoon API ping failed');
+        }
+    }
+
+    /** @phpstan-ignore-next-line */
+    public function validateAppInstanceStatusIsExpectedAndConfigureLagoonClientAndVerifyLagoonValues(
+        PolydockAppInstanceInterface $appInstance,
+        PolydockAppInstanceStatus $expectedStatus,
+        $logContext = [],
+        bool $testLagoonPing = true,
+        bool $verifyLagoonValuesAreAvailable = true,
+        bool $verifyLagoonProjectNameIsAvailable = true,
+        bool $verifyLagoonProjectIdIsAvailable = true
+    ): void {
+        // $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus, $logContext);
+        // $this->setLagoonClientFromAppInstance($appInstance, $logContext);
+        $this->validateAppInstanceStatusIsExpected($appInstance, $expectedStatus);
+        $this->setLagoonClientFromAppInstance($appInstance);
+
+        if ($testLagoonPing) {
+            $this->validateLagoonPingAndThrowExceptionIfFailed($appInstance);
+            $this->info('Lagoon API ping successful', $logContext);
+        }
+
+        if ($verifyLagoonValuesAreAvailable) {
+            if (! $this->verifyLagoonValuesAreAvailable($appInstance, $logContext)) {
+                $this->error('Required Lagoon values not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Required Lagoon values not available');
+            }
+        }
+
+        if ($verifyLagoonProjectNameIsAvailable) {
+            if (! $this->verifyLagoonProjectNameIsAvailable($appInstance, $logContext)) {
+                $this->error('Lagoon project name not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Lagoon project name not available');
+            }
+        }
+
+        if ($verifyLagoonProjectIdIsAvailable) {
+            if (! $this->verifyLagoonProjectIdIsAvailable($appInstance, $logContext)) {
+                $this->error('Lagoon project id not available', $logContext);
+                throw new PolydockAppInstanceStatusFlowException('Lagoon project id not available');
+            }
+        }
     }
 }

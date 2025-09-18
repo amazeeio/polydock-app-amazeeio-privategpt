@@ -22,6 +22,8 @@ $modelsToGenerate = [
     'User' => 'AdministratorResponse',
     'PrivateAIKey' => 'LlmKeysResponse', // for LLM keys
     'LiteLLMToken' => 'VdbKeysResponse',  // for VDB keys
+    'Region' => 'RegionResponse',
+    'APIToken' => 'APIToken',
 ];
 
 function phpType($propSchema, $isNullable = false): string
@@ -48,7 +50,8 @@ function phpType($propSchema, $isNullable = false): string
     $format = $propSchema['format'] ?? null;
 
     $type = match ($openApiType) {
-        'string' => $format === 'date-time' ? '\DateTimeInterface' : 'string',
+        // 'string' => $format === 'date-time' ? '\DateTimeInterface' : 'string',
+        'string' => 'string',
         'integer' => 'int',
         'number' => 'float',
         'boolean' => 'bool',
@@ -127,24 +130,7 @@ final readonly class HealthResponse
         /**
          * Health status
          */
-        public string $status,
-        /**
-         * Timestamp
-         */
-        public string $timestamp,
-        /**
-         * API version
-         */
-        public string $version,
-        /**
-         * Uptime in seconds
-         */
-        public int $uptime,
-        /**
-         * Service status details
-         * @var array<string, mixed>|null
-         */
-        public ?array $services = null
+        public string $status
     ) {}
 }
 PHP;
