@@ -72,6 +72,14 @@ trait PreCreateAppInstanceTrait
 
         $projectName = $appInstance->getKeyValue('lagoon-project-name');
 
+        $companyName = $appInstance->getKeyValue('company-name');
+        if ( $companyName != "" ) {
+            $appInstance->name = $this->addUniquePostfixToString($companyName); // Force a name change to avoid unique constraint issues
+            $projectName = $appInstance->name;
+            $appInstance->storeKeyValue('lagoon-project-name', $projectName); // ensure this is set, even if it was not provided
+            $appInstance->save();
+        } // else we stick with the standard
+
         $this->preCreateLogger?->info($functionName.': starting for project: '.$projectName, $logContext);
         $appInstance->setStatus(
             PolydockAppInstanceStatus::PRE_CREATE_RUNNING,
@@ -94,5 +102,17 @@ trait PreCreateAppInstanceTrait
         $appInstance->setStatus(PolydockAppInstanceStatus::PRE_CREATE_COMPLETED, 'Pre-create completed')->save();
 
         return $appInstance;
+    }
+
+    protected function onlyAlphanumericStartsChar(string $input): string
+    {
+        // Remove non-alphanumeric characters from the start
+        return preg_replace('/^[^a-zA-Z0-9]+/', '', $input) ?? '';
+    }
+
+    protected function addUniquePostfixToString(string $baseString): string
+    {
+        $uniquePostfix = substr(preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(random_bytes(6))), 0, 8);
+        return strtolower($this->onlyAlphanumericStartsChar($baseString) . '-' . $uniquePostfix);
     }
 }
