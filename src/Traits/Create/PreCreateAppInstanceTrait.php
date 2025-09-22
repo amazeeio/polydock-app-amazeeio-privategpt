@@ -73,7 +73,8 @@ trait PreCreateAppInstanceTrait
         $projectName = $appInstance->getKeyValue('lagoon-project-name');
 
         $companyName = $appInstance->getKeyValue('company-name');
-        if ( $companyName != "" ) {
+        if ($companyName != '') {
+            /** @phpstan-ignore-next-line */
             $appInstance->name = $this->addUniquePostfixToString($companyName); // Force a name change to avoid unique constraint issues
             $projectName = $appInstance->name;
             $appInstance->storeKeyValue('lagoon-project-name', $projectName); // ensure this is set, even if it was not provided
@@ -107,12 +108,13 @@ trait PreCreateAppInstanceTrait
     protected function onlyAlphanumericStartsChar(string $input): string
     {
         // Remove non-alphanumeric characters from the start
-        return preg_replace('/^[^a-zA-Z0-9]+/', '', $input) ?? '';
+        return preg_replace('/[^a-z0-9]+/', '', $input) ?? '';
     }
 
     protected function addUniquePostfixToString(string $baseString): string
     {
-        $uniquePostfix = substr(preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(random_bytes(6))), 0, 8);
-        return strtolower($this->onlyAlphanumericStartsChar($baseString) . '-' . $uniquePostfix);
+        $uniquePostfix = substr(preg_replace('/[^a-z0-9]/', '', base64_encode(random_bytes(6))) ?? uniqid(), 0, 8);
+
+        return strtolower($this->onlyAlphanumericStartsChar($baseString).'-'.$uniquePostfix);
     }
 }
