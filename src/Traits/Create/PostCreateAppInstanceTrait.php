@@ -181,6 +181,10 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_USER', $appInstance->getKeyValue('user-email'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_PASSWORD', $appInstance->getKeyValue('user-password'), 'GLOBAL');
 
+            // Inject company name
+            $companyName = $appInstance->getKeyValue('company-name');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_COMPANY_NAME', $companyName, 'GLOBAL');
+
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 
         } catch (\Exception $e) {
