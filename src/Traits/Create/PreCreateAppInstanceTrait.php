@@ -99,6 +99,9 @@ trait PreCreateAppInstanceTrait
         $adminEmail = $appInstance->getKeyValue('user-email');
         $appInstance->storeKeyValue('lagoon-generate-app-admin-username', $adminEmail); // since this is saved below, let's see if this works.
 
+        // We don't want to send email details in the mail
+        $appInstance->storeKeyValue('hide-login-email-info', 'true');
+
         $this->preCreateLogger?->info($functionName.': completed', $logContext);
         $appInstance->setStatus(PolydockAppInstanceStatus::PRE_CREATE_COMPLETED, 'Pre-create completed')->save();
 
