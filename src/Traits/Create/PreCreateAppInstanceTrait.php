@@ -108,12 +108,12 @@ trait PreCreateAppInstanceTrait
     protected function onlyAlphanumericStartsChar(string $input): string
     {
         // Remove non-alphanumeric characters from the start
-        return preg_replace('/[^a-z0-9]+/', '', $input) ?? '';
+        return preg_replace('/[^a-z0-9]+/', '', strtolower($input)) ?? '';
     }
 
     protected function addUniquePostfixToString(string $baseString): string
     {
-        $uniquePostfix = substr(preg_replace('/[^a-z0-9]/', '', base64_encode(random_bytes(6))) ?? uniqid(), 0, 8);
+        $uniquePostfix = substr($this->onlyAlphanumericStartsChar(base64_encode(random_bytes(6))), 0, 8);
 
         return strtolower($this->onlyAlphanumericStartsChar($baseString).'-'.$uniquePostfix);
     }
