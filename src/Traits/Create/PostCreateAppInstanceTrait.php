@@ -128,7 +128,7 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLogger?->info($functionName.': injecting amazee.ai direct API credentials', $logContext);
 
             $amazeeAiBackendToken = $appInstance->getKeyValue('amazee-ai-backend-token');
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $amazeeAiBackendToken, 'GLOBAL');
+            // $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $amazeeAiBackendToken, 'GLOBAL');
 
             $teamId = $appInstance->getKeyValue('amazee-ai-team-id');
             if ($teamId) {
@@ -150,7 +150,11 @@ trait PostCreateAppInstanceTrait
                 }
                 if (isset($credentials['backend_key']) && isset($credentials['backend_key']['token'])) {
                     $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']['token'], 'GLOBAL');
+                } else {
+                    throw new \RuntimeException('No backend_key token found in amazee-ai-team-credentials');
                 }
+            } else {
+                $this->postCreateLogger?->warning('No amazee-ai-team-credentials found in app instance', $logContext);
             }
 
             // Chainlit details - seems to be hardcoded
