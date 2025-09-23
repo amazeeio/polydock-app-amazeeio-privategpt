@@ -97,6 +97,9 @@ trait UsesAmazeeAi
         $logContext = $this->amazeeAiLogger?->getLogContext(__FUNCTION__) ?? [];
 
         $projectName = $appInstance->getKeyValue('lagoon-project-name');
+        $teamPrefix = 'gpt-';
+        $teamName = sprintf('%s%s', $teamPrefix, $projectName);
+
         // we use the user-email from polydock registration as the amazee.ai admin email
         $adminEmail = $appInstance->getKeyValue('user-email');
 
@@ -109,7 +112,7 @@ trait UsesAmazeeAi
 
         try {
             $this->amazeeAiLogger?->info('Creating team on amazee.ai', $logContext);
-            $team = $this->getAmazeeAiClient()->createTeam($projectName, $adminEmail);
+            $team = $this->getAmazeeAiClient()->createTeam($teamName, $adminEmail);
 
             $teamId = $team->id;
             $logContext['team_id'] = $teamId;

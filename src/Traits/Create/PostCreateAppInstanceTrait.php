@@ -153,8 +153,6 @@ trait PostCreateAppInstanceTrait
                 } else {
                     throw new \RuntimeException('No backend_key token found in amazee-ai-team-credentials');
                 }
-            } else {
-                $this->postCreateLogger?->warning('No amazee-ai-team-credentials found in app instance', $logContext);
             }
 
             // Chainlit details - seems to be hardcoded
