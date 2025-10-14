@@ -168,6 +168,10 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
 
+            // Unleash Values
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'UNLEASH_API_TOKEN', $appInstance->getKeyValue('amazee-ai-unleash-api-token'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'UNLEASH_URL', $appInstance->getKeyValue('amazee-ai-unleash-url'), 'GLOBAL');
+
             // Now let's create the routes
             $projectName = $appInstance->getKeyValue('lagoon-project-name');
             $deployTargetId = (int) $appInstance->getKeyValue('lagoon-deploy-region-id');
