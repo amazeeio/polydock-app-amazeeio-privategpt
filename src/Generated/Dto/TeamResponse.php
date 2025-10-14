@@ -6,6 +6,7 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * TeamResponse
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
+ *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class TeamResponse
@@ -34,7 +35,7 @@ final readonly class TeamResponse
         /**
          * Created At
          */
-        public \DateTimeInterface $created_at,
+        public string $created_at,
         /**
          * Phone
          */
@@ -46,10 +47,10 @@ final readonly class TeamResponse
         /**
          * Updated At
          */
-        public ?\DateTimeInterface $updated_at = null,
+        public ?string $updated_at = null,
         /**
          * Last Payment
          */
-        public ?\DateTimeInterface $last_payment = null
+        public ?string $last_payment = null
     ) {}
 }

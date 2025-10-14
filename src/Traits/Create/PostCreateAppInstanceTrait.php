@@ -2,6 +2,7 @@
 
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create;
 
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Routemap\Routemapper;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
@@ -43,6 +44,14 @@ trait PostCreateAppInstanceTrait
         if ($this->postCreateAmazeeAiOps === null && $this instanceof AmazeeAiOperationsInterface) {
             $this->postCreateAmazeeAiOps = $this;
         }
+    }
+
+    protected function generateSecurePassword(int $length = 32): string
+    {
+        // Generate a secure random password using URL-safe base64 encoding
+        $password = rtrim(strtr(base64_encode(random_bytes(max(1, $length))), '+/', '-_'), '=');
+
+        return substr($password, 0, $length);
     }
 
     public function postCreateAppInstance(PolydockAppInstanceInterface $appInstance): PolydockAppInstanceInterface
@@ -104,6 +113,8 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_EMAIL', $appInstance->getKeyValue('user-email'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_APP_INSTANCE_HEALTH_WEBHOOK_URL', $appInstance->getKeyValue('polydock-app-instance-health-webhook-url'), 'GLOBAL');
             $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_FEATURE_FLAG_INSIGHTS', 'false', 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_ghcr_USERNAME', $appInstance->getKeyValue('amazee-ai-registry-ghcr-username'), 'CONTAINER_REGISTRY');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'REGISTRY_ghcr_PASSWORD', $appInstance->getKeyValue('amazee-ai-registry-ghcr-password'), 'CONTAINER_REGISTRY');
 
             // Set the user's selected region information from the store
             /** @phpstan-ignore-next-line */
@@ -117,25 +128,64 @@ trait PostCreateAppInstanceTrait
             $this->postCreateLogger?->info($functionName.': injecting amazee.ai direct API credentials', $logContext);
 
             $amazeeAiBackendToken = $appInstance->getKeyValue('amazee-ai-backend-token');
-            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $amazeeAiBackendToken, 'GLOBAL');
+            // $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $amazeeAiBackendToken, 'GLOBAL');
 
             $teamId = $appInstance->getKeyValue('amazee-ai-team-id');
             if ($teamId) {
                 $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_TEAM_ID', $teamId, 'GLOBAL');
             }
 
+            // AMAZEE_AI_DEFAULT_REGION_ID
+            // $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']['litellm_token'], 'GLOBAL');
+
             $teamCredentials = $appInstance->getKeyValue('amazee-ai-team-credentials');
+            // These seem to be the keys injected from the amazee.ai operations
             if ($teamCredentials) {
                 $credentials = json_decode($teamCredentials, true);
-                if (isset($credentials['llm_keys']) && isset($credentials['vdb_keys'])) {
-                    foreach ($credentials['llm_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_LLM_'.strtoupper($key), $value, 'GLOBAL');
-                    }
-                    foreach ($credentials['vdb_keys'] as $key => $value) {
-                        $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AI_VDB_'.strtoupper($key), $value, 'GLOBAL');
-                    }
+                if (isset($credentials['llm_key']) && isset($credentials['llm_key']['litellm_token'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']['litellm_token'], 'GLOBAL');
+                }
+                if (isset($credentials['llm_key']) && isset($credentials['llm_key']['litellm_api_url'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_BASE_URL', $credentials['llm_key']['litellm_api_url'], 'GLOBAL');
+                }
+                if (isset($credentials['backend_key']) && isset($credentials['backend_key']['token'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_BACKEND_TOKEN', $credentials['backend_key']['token'], 'GLOBAL');
+                } else {
+                    throw new \RuntimeException('No backend_key token found in amazee-ai-team-credentials');
                 }
             }
+
+            // Chainlit details - seems to be hardcoded
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_ID', 'chainlit', 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'MCP_AUTH_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'OAUTH_DRUPAL_CLIENT_SECRET', $this->generateSecurePassword(64), 'GLOBAL');
+
+            // Phoenix details
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_API_KEY', $appInstance->getKeyValue('amazee-ai-phoenix-api-key'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_COLLECTOR_ENDPOINT', $appInstance->getKeyValue('amazee-ai-phoenix-collector-endpoint'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'PHOENIX_PROJECT_NAME', $projectName, 'GLOBAL');
+
+            // Now let's create the routes
+            $projectName = $appInstance->getKeyValue('lagoon-project-name');
+            $deployTargetId = (int) $appInstance->getKeyValue('lagoon-deploy-region-id');
+            $drupalUrl = 'https://'.Routemapper::drupalUrl($deployTargetId, $projectName);
+            $chatUrl = 'https://'.Routemapper::chainlitUrl($deployTargetId, $projectName);
+            $routesBase64 = Routemapper::base64encodedRoutes($deployTargetId, $projectName);
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'LAGOON_ROUTES_JSON', $routesBase64, 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_URL', $drupalUrl, 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'CHAINLIT_URL', $chatUrl, 'GLOBAL');
+
+            // Inject drupal defaults
+
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_USER', $appInstance->getKeyValue('user-email'), 'GLOBAL');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'DRUPAL_ADMIN_PASSWORD', $appInstance->getKeyValue('user-password'), 'GLOBAL');
+
+            // Inject company name
+            $companyName = $appInstance->getKeyValue('company-name');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_COMPANY_NAME', $companyName, 'GLOBAL');
 
             $this->postCreateLogger?->info($functionName.': completed injecting amazee.ai direct API credentials', $logContext);
 

@@ -97,7 +97,11 @@ trait UsesAmazeeAi
         $logContext = $this->amazeeAiLogger?->getLogContext(__FUNCTION__) ?? [];
 
         $projectName = $appInstance->getKeyValue('lagoon-project-name');
-        $adminEmail = $appInstance->getKeyValue('amazee-ai-admin-email');
+        $teamPrefix = 'gpt-';
+        $teamName = sprintf('%s%s', $teamPrefix, $projectName);
+
+        // we use the user-email from polydock registration as the amazee.ai admin email
+        $adminEmail = $appInstance->getKeyValue('user-email');
 
         if (empty($adminEmail)) {
             throw new PolydockAppInstanceStatusFlowException('amazee.ai admin email is required');
@@ -108,17 +112,12 @@ trait UsesAmazeeAi
 
         try {
             $this->amazeeAiLogger?->info('Creating team on amazee.ai', $logContext);
-            $team = $this->getAmazeeAiClient()->createTeam($projectName, $adminEmail);
+            $team = $this->getAmazeeAiClient()->createTeam($teamName, $adminEmail);
 
             $teamId = $team->id;
             $logContext['team_id'] = $teamId;
 
             $this->amazeeAiLogger?->info('Team created successfully', $logContext + ['team' => $team]);
-
-            $this->amazeeAiLogger?->info('Setting up team administrator', $logContext);
-            $administrator = $this->getAmazeeAiClient()->addTeamAdministrator((string) $teamId, $adminEmail);
-
-            $this->amazeeAiLogger?->info('Team administrator set up successfully', $logContext + ['administrator' => $administrator]);
 
             return $team;
         } catch (AmazeeAiClientException $e) {
@@ -128,26 +127,33 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, llm_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, vdb_keys: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
         $this->ensureAmazeeAiTraitInitialized();
 
+        $llmRegionId = $appInstance->getKeyValue('amazee-ai-backend-region-id');
+        if (empty($llmRegionId)) {
+            throw new PolydockAppInstanceStatusFlowException('amazee.ai LLM region is required to generate LLM keys');
+        }
+
         $logContext = $this->amazeeAiLogger?->getLogContext(__FUNCTION__) ?? [];
         $logContext['team_id'] = $teamId;
 
         try {
-            $this->amazeeAiLogger?->info('Generating LLM keys for team', $logContext);
-            $llmKeys = $this->getAmazeeAiClient()->generateLlmKeys($teamId);
+            // $this->amazeeAiLogger?->info('Generating LLM keys for team', $logContext);
+            // $llmKeys = $this->getAmazeeAiClient()->generateLlmKeys($teamId);
 
-            $this->amazeeAiLogger?->info('Generating VDB keys for team', $logContext);
-            $vdbKeys = $this->getAmazeeAiClient()->generateVdbKeys($teamId);
+            // $this->amazeeAiLogger?->info('Generating VDB keys for team', $logContext);
+            // $vdbKeys = $this->getAmazeeAiClient()->generateVdbKeys($teamId);
 
             $credentials = [
                 'team_id' => $teamId,
-                'llm_keys' => $llmKeys,
-                'vdb_keys' => $vdbKeys,
+                'backend_key' => $this->getAmazeeAiClient()->createBackendKey(intval($teamId)),
+                'llm_key' => $this->getAmazeeAiClient()->createLlmKey(intval($teamId), intval($llmRegionId)),
+                // 'llm_keys' => $llmKeys,
+                // 'vdb_keys' => $vdbKeys,
             ];
 
             $this->amazeeAiLogger?->info('Keys generated successfully for team', $logContext);

@@ -6,6 +6,7 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * LlmKeysResponse
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
+ *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class LlmKeysResponse
@@ -50,7 +51,7 @@ final readonly class LlmKeysResponse
         /**
          * Created At
          */
-        public ?\DateTimeInterface $created_at = null,
+        public ?string $created_at = null,
         /**
          * Owner Id
          */
