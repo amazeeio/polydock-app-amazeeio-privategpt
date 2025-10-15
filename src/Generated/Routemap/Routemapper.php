@@ -7,11 +7,13 @@ class Routemapper
     public static function clusterMap(int $deployTarget): string
     {
         return match ($deployTarget) {
+            1 => 'test',
             131 => 'ch4',
             115 => 'de3',
             132 => 'au2',
             126 => 'us2',
             122 => 'uk3',
+            2001 => 'local',
             default => throw new \InvalidArgumentException('Invalid deploy target: '.$deployTarget),
         };
     }
