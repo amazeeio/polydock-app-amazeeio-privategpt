@@ -6,7 +6,6 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * APIToken
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
- *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class APIToken
