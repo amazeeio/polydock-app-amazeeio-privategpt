@@ -6,7 +6,6 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * TeamResponse
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
- *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class TeamResponse
@@ -51,6 +50,14 @@ final readonly class TeamResponse
         /**
          * Last Payment
          */
-        public ?string $last_payment = null
+        public ?string $last_payment = null,
+        /**
+         * Deleted At
+         */
+        public ?string $deleted_at = null,
+        /**
+         * Retention Warning Sent At
+         */
+        public ?string $retention_warning_sent_at = null
     ) {}
 }
