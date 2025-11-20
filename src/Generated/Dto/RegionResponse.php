@@ -6,7 +6,6 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto;
  * RegionResponse
  *
  * Auto-generated from OpenAPI specification. Do not edit manually.
- *
  * @see https://api.amazee.ai/openapi.json
  */
 final readonly class RegionResponse
@@ -23,11 +22,11 @@ final readonly class RegionResponse
         /**
          * Postgres Admin User
          */
-        public ?string $postgres_admin_user,
+        public string $postgres_admin_user,
         /**
          * Postgres Admin Password
          */
-        public ?string $postgres_admin_password,
+        public string $postgres_admin_password,
         /**
          * Litellm Api Url
          */
@@ -35,7 +34,7 @@ final readonly class RegionResponse
         /**
          * Litellm Api Key
          */
-        public ?string $litellm_api_key,
+        public string $litellm_api_key,
         /**
          * Id
          */
