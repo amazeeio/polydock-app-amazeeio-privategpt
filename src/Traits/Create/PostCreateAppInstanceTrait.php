@@ -135,9 +135,10 @@ trait PostCreateAppInstanceTrait
                 $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_TEAM_ID', $teamId, 'GLOBAL');
             }
 
-            // AMAZEE_AI_DEFAULT_REGION_ID
-            // $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEEAI_API_KEY', $credentials['llm_key']['litellm_token'], 'GLOBAL');
-
+            // AMAZEE_AI_DEFAULT_REGION_ID - this will be the storeId specified at the app level. 
+            $aiBackendRegionId = $appInstance->getKeyValue('amazee-ai-backend-region-id');
+            $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'AMAZEE_AI_DEFAULT_REGION_ID', $aiBackendRegionId, 'GLOBAL');
+            
             $teamCredentials = $appInstance->getKeyValue('amazee-ai-team-credentials');
             // These seem to be the keys injected from the amazee.ai operations
             if ($teamCredentials) {
