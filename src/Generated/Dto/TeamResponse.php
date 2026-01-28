@@ -44,6 +44,10 @@ final readonly class TeamResponse
          */
         public ?string $billing_address = null,
         /**
+         * Force User Keys
+         */
+        public ?bool $force_user_keys = null,
+        /**
          * Updated At
          */
         public ?string $updated_at = null,
