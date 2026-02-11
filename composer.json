@@ -22,8 +22,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "freedomtech-hosting/polydock-app": "^0.0.26",
-    "freedomtech-hosting/polydock-app-amazeeio-generic": "*",
+    "freedomtech-hosting/polydock-app": "^0.0.27",
+    "freedomtech-hosting/polydock-app-amazeeio-generic": "^0.0.75",
     "freedomtech-hosting/ft-lagoon-php": "^0.0.5",
     "guzzlehttp/guzzle": "^7.0",
     "cuyz/valinor": "^1.0"
