@@ -11,6 +11,11 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PostCreateAppInstanceTr
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\PreCreateAppInstanceTrait;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\UsesAmazeeAiDevmode;
 use FreedomtechHosting\FtLagoonPhp\Client as LagoonClient;
+use FreedomtechHosting\PolydockApp\Attributes\PolydockAppInstanceFields;
+use FreedomtechHosting\PolydockApp\Attributes\PolydockAppStoreFields;
+use FreedomtechHosting\PolydockApp\Attributes\PolydockAppTitle;
+use FreedomtechHosting\PolydockApp\Contracts\HasAppInstanceFormFields;
+use FreedomtechHosting\PolydockApp\Contracts\HasStoreAppFormFields;
 use FreedomtechHosting\PolydockApp\Enums\PolydockAppInstanceStatus;
 use FreedomtechHosting\PolydockApp\PolydockAppBase;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
@@ -31,7 +36,10 @@ use FreedomtechHosting\PolydockAppAmazeeioGeneric\Traits\Upgrade\PostUpgradeAppI
 use FreedomtechHosting\PolydockAppAmazeeioGeneric\Traits\Upgrade\PreUpgradeAppInstanceTrait;
 use FreedomtechHosting\PolydockAppAmazeeioGeneric\Traits\Upgrade\UpgradeAppInstanceTrait;
 
-class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperationsInterface, LagoonOperationsInterface, LoggerInterface
+#[PolydockAppTitle('Private GPT App')]
+#[PolydockAppStoreFields]
+#[PolydockAppInstanceFields]
+class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperationsInterface, HasAppInstanceFormFields, HasStoreAppFormFields, LagoonOperationsInterface, LoggerInterface
 {
     // Claim
     use ClaimAppInstanceTrait;
