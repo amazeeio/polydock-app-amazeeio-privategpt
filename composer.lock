@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a56ab664aa52413deed9c3a6599edafb",
+    "content-hash": "8523d8b36db8a84aff47967cb15569f4",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -951,16 +951,16 @@
         },
         {
             "name": "freedomtech-hosting/ft-lagoon-php",
-            "version": "v0.0.5",
+            "version": "v0.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amazeeio/polydock-lagoon-php-lib.git",
-                "reference": "e8669ab79091eade0444a1fe7bcf96ed243b8ea4"
+                "reference": "4dc3662e673b16c059afb330135459c79a1512a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amazeeio/polydock-lagoon-php-lib/zipball/e8669ab79091eade0444a1fe7bcf96ed243b8ea4",
-                "reference": "e8669ab79091eade0444a1fe7bcf96ed243b8ea4",
+                "url": "https://api.github.com/repos/amazeeio/polydock-lagoon-php-lib/zipball/4dc3662e673b16c059afb330135459c79a1512a7",
+                "reference": "4dc3662e673b16c059afb330135459c79a1512a7",
                 "shasum": ""
             },
             "require": {
@@ -987,9 +987,9 @@
             "description": "The Freedom Tech Lagoon PHP library",
             "support": {
                 "issues": "https://github.com/amazeeio/polydock-lagoon-php-lib/issues",
-                "source": "https://github.com/amazeeio/polydock-lagoon-php-lib/tree/v0.0.5"
+                "source": "https://github.com/amazeeio/polydock-lagoon-php-lib/tree/v0.0.8"
             },
-            "time": "2025-04-22T03:56:15+00:00"
+            "time": "2025-07-18T19:22:25+00:00"
         },
         {
             "name": "freedomtech-hosting/polydock-amazeeai-backend-client-php",
@@ -1033,16 +1033,16 @@
         },
         {
             "name": "freedomtech-hosting/polydock-app",
-            "version": "v0.0.27",
+            "version": "v0.0.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amazeeio/polydock-app-lib.git",
-                "reference": "68acaa5e227d356c3e6b0136f2153368bb05e8f5"
+                "reference": "891734e96d988159ca0fe51f15b0fb7408a9d135"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amazeeio/polydock-app-lib/zipball/68acaa5e227d356c3e6b0136f2153368bb05e8f5",
-                "reference": "68acaa5e227d356c3e6b0136f2153368bb05e8f5",
+                "url": "https://api.github.com/repos/amazeeio/polydock-app-lib/zipball/891734e96d988159ca0fe51f15b0fb7408a9d135",
+                "reference": "891734e96d988159ca0fe51f15b0fb7408a9d135",
                 "shasum": ""
             },
             "require": {
@@ -1067,28 +1067,28 @@
             "description": "Library for Polydock Apps",
             "support": {
                 "issues": "https://github.com/amazeeio/polydock-app-lib/issues",
-                "source": "https://github.com/amazeeio/polydock-app-lib/tree/v0.0.27"
+                "source": "https://github.com/amazeeio/polydock-app-lib/tree/v0.0.29"
             },
-            "time": "2026-02-11T17:52:58+00:00"
+            "time": "2026-02-12T18:00:39+00:00"
         },
         {
             "name": "freedomtech-hosting/polydock-app-amazeeio-generic",
-            "version": "v0.0.75",
+            "version": "v0.0.76",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amazeeio/polydock-app-amazeeio-generic.git",
-                "reference": "5554a5bc80a3a9b2aa174193b2f5781747b12130"
+                "reference": "cb4c157ee88dca7f3a9f34732c8746859bcf09e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/5554a5bc80a3a9b2aa174193b2f5781747b12130",
-                "reference": "5554a5bc80a3a9b2aa174193b2f5781747b12130",
+                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/cb4c157ee88dca7f3a9f34732c8746859bcf09e4",
+                "reference": "cb4c157ee88dca7f3a9f34732c8746859bcf09e4",
                 "shasum": ""
             },
             "require": {
-                "freedomtech-hosting/ft-lagoon-php": "^0.0.5",
+                "freedomtech-hosting/ft-lagoon-php": "^0.0.8",
                 "freedomtech-hosting/polydock-amazeeai-backend-client-php": "^0.0.5",
-                "freedomtech-hosting/polydock-app": "^0.0.27"
+                "freedomtech-hosting/polydock-app": "^0.0.29"
             },
             "type": "library",
             "autoload": {
@@ -1109,9 +1109,9 @@
             "description": "Polydock App - amazee.io Generic",
             "support": {
                 "issues": "https://github.com/amazeeio/polydock-app-amazeeio-generic/issues",
-                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.75"
+                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.76"
             },
-            "time": "2026-02-11T19:21:36+00:00"
+            "time": "2026-02-12T19:23:08+00:00"
         },
         {
             "name": "fruitcake/php-cors",
