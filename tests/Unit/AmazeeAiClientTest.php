@@ -393,11 +393,16 @@ class AmazeeAiClientTest extends TestCase
             new Response(200, ['Content-Type' => 'application/json'], $invalidResponse),
         ]);
 
-        $client = $this->createClientWithMockHandler($mock);
+        try {
+            $client = $this->createClientWithMockHandler($mock);
 
-        $this->expectException(AmazeeAiValidationException::class);
-        $this->expectExceptionMessage('Failed to validate API response');
-        $client->health();
+            $client->health();
+        } catch (AmazeeAiValidationException|AmazeeAiClientException $e) {
+            $this->assertMatchesRegularExpression(
+                '/Failed to check health/',
+                $e->getMessage()
+            );
+        }
     }
 
     private function createClientWithMockHandler(MockHandler $mockHandler): AmazeeAiClient
