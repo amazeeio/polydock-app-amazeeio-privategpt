@@ -3,7 +3,6 @@
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\AmazeeAiOperationsInterface;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonOperationsInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits\Create\CreateAppInstanceTrait;
@@ -109,6 +108,9 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
         return self::$version;
     }
 
+    /**
+     * @throws PolydockAppInstanceStatusFlowException
+     */
     public function pingLagoonAPI(): bool
     {
         if (! $this->lagoonClient) {
@@ -320,6 +322,8 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
 
     /**
      * @param  array<string, mixed>  $logContext
+     *
+     * @throws PolydockAppInstanceStatusFlowException
      */
     public function validateAndSetupLagoon(
         PolydockAppInstanceInterface $appInstance,
@@ -410,6 +414,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
     /**
      * @param  array<string, mixed>  $context
      */
+    #[\Override]
     public function info(string $message, array $context = []): PolydockAppBase
     {
         // Delegate to parent class logging (inherited from PolydockAppBase)
@@ -419,6 +424,7 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
     /**
      * @param  array<string, mixed>  $context
      */
+    #[\Override]
     public function error(string $message, array $context = []): PolydockAppBase
     {
         // Delegate to parent class logging (inherited from PolydockAppBase)
@@ -430,7 +436,9 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
      ** The next step there will be to refactor the upstream class to use these methods in a trait
      ** so that we can avoid code duplication.
      */
-    /** @phpstan-ignore-next-line */
+    /** @phpstan-ignore-next-line
+     * @throws PolydockAppInstanceStatusFlowException
+     */
     public function validateLagoonPingAndThrowExceptionIfFailed($logContext = []): void
     {
         $ping = $this->pingLagoonAPI();

@@ -128,6 +128,8 @@ trait UsesAmazeeAi
 
     /**
      * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
+     *
+     * @throws PolydockAppInstanceStatusFlowException
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
@@ -159,12 +161,15 @@ trait UsesAmazeeAi
             $this->amazeeAiLogger?->info('Keys generated successfully for team', $logContext);
 
             return $credentials;
-        } catch (AmazeeAiClientException $e) {
+        } catch (AmazeeAiClientException|PolydockAppInstanceStatusFlowException $e) {
             $this->amazeeAiLogger?->error('Error generating keys for team: '.$e->getMessage(), $logContext);
             throw new PolydockAppInstanceStatusFlowException('Error generating keys for team: '.$e->getMessage());
         }
     }
 
+    /**
+     * @throws PolydockAppInstanceStatusFlowException
+     */
     public function getTeamDetails(string $teamId): TeamResponse
     {
         $this->ensureAmazeeAiTraitInitialized();
@@ -179,7 +184,7 @@ trait UsesAmazeeAi
             $this->amazeeAiLogger?->info('Team details retrieved successfully', $logContext);
 
             return $team;
-        } catch (AmazeeAiClientException $e) {
+        } catch (AmazeeAiClientException|PolydockAppInstanceStatusFlowException $e) {
             $this->amazeeAiLogger?->error('Error getting team details: '.$e->getMessage(), $logContext);
             throw new PolydockAppInstanceStatusFlowException('Error getting team details: '.$e->getMessage());
         }

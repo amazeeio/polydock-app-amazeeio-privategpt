@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Routemap;
 
 class Routemapper
@@ -45,6 +47,9 @@ class Routemapper
         ]];
     }
 
+    /**
+     * @throws \JsonException
+     */
     public static function base64encodedRoutes(int $deployTarget, string $projectName): string
     {
         $routes = self::deployTargetToRoutes($deployTarget, $projectName);

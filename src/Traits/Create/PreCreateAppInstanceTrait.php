@@ -75,8 +75,8 @@ trait PreCreateAppInstanceTrait
         $companyName = $appInstance->getKeyValue('company-name');
         if ($companyName != '') {
             /** @phpstan-ignore-next-line */
-            $appInstance->name = $this->addUniquePostfixToString($companyName); // Force a name change to avoid unique constraint issues
-            $projectName = $appInstance->name;
+            $appInstance->setName($this->addUniquePostfixToString($companyName)); // Force a name change to avoid unique constraint issues
+            $projectName = $appInstance->getName();
             $appInstance->storeKeyValue('lagoon-project-name', $projectName); // ensure this is set, even if it was not provided
             $appInstance->save();
         } // else we stick with the standard

@@ -27,6 +27,7 @@ class PolydockPrivateGptAppTest extends TestCase
         );
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         Mockery::close();
@@ -111,7 +112,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $result = $this->app->pingLagoonAPI();
@@ -127,7 +127,6 @@ class PolydockPrivateGptAppTest extends TestCase
         // Ensure lagoon client is null for this test
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, null);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -146,7 +145,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -176,7 +174,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $lagoonClient = $property->getValue($this->app);
 
         $this->assertSame($mockLagoonClient, $lagoonClient);
@@ -214,7 +211,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -248,7 +244,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -282,7 +277,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -316,7 +310,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -339,7 +332,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -362,7 +354,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -385,7 +376,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -408,7 +398,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -440,7 +429,6 @@ class PolydockPrivateGptAppTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -481,9 +469,7 @@ class PolydockPrivateGptAppTest extends TestCase
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
 
         $appInstance->method('getKeyValue')
-            ->willReturnCallback(function ($key) use ($keyValues) {
-                return $keyValues[$key] ?? null;
-            });
+            ->willReturnCallback(fn ($key) => $keyValues[$key] ?? null);
 
         return $appInstance;
     }

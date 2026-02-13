@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;

@@ -52,6 +52,7 @@ class UsesAmazeeAiTest extends TestCase
         );
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         Mockery::close();
@@ -92,7 +93,6 @@ class UsesAmazeeAiTest extends TestCase
         // Set the mock client directly to bypass the ping check in setAmazeeAiClientFromAppInstance
         $reflection = new ReflectionClass($testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($testClass, $mockClient);
 
         // Verify the client was set
@@ -120,7 +120,6 @@ class UsesAmazeeAiTest extends TestCase
         // Set the mock client directly
         $reflection = new ReflectionClass($testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($testClass, $mockClient);
 
         // Verify the client was set
@@ -150,7 +149,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $result = $this->testClass->pingAmazeeAi();
@@ -165,7 +163,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -187,7 +184,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -201,7 +197,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -224,7 +219,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -249,7 +243,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -271,7 +264,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $result = $this->testClass->getTeamDetails('team-123');
@@ -289,7 +281,6 @@ class UsesAmazeeAiTest extends TestCase
 
         $reflection = new ReflectionClass($this->testClass);
         $property = $reflection->getProperty('amazeeAiClient');
-        $property->setAccessible(true);
         $property->setValue($this->testClass, $mockClient);
 
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
@@ -302,9 +293,7 @@ class UsesAmazeeAiTest extends TestCase
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
 
         $appInstance->method('getKeyValue')
-            ->willReturnCallback(function ($key) use ($keyValues) {
-                return $keyValues[$key] ?? null;
-            });
+            ->willReturnCallback(fn ($key) => $keyValues[$key] ?? null);
 
         return $appInstance;
     }

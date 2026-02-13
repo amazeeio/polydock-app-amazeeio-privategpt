@@ -3,6 +3,8 @@
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
@@ -14,14 +16,14 @@ use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 trait UsesAmazeeAiDevmode
 {
     use UsesAmazeeAi {
-        setupAmazeeAiTrait as private originalSetupAmazeeAiTrait;
-        ensureAmazeeAiTraitInitialized as private originalEnsureAmazeeAiTraitInitialized;
-        getAmazeeAiClient as private originalGetAmazeeAiClient;
-        setAmazeeAiClientFromAppInstance as private originalSetAmazeeAiClientFromAppInstance;
-        pingAmazeeAi as private originalPingAmazeeAi;
-        createTeamAndSetupAdministrator as private originalCreateTeamAndSetupAdministrator;
-        generateKeysForTeam as private originalGenerateKeysForTeam;
-        getTeamDetails as private originalGetTeamDetails;
+        UsesAmazeeAi::setupAmazeeAiTrait as private originalSetupAmazeeAiTrait;
+        UsesAmazeeAi::ensureAmazeeAiTraitInitialized as private originalEnsureAmazeeAiTraitInitialized;
+        UsesAmazeeAi::getAmazeeAiClient as private originalGetAmazeeAiClient;
+        UsesAmazeeAi::setAmazeeAiClientFromAppInstance as private originalSetAmazeeAiClientFromAppInstance;
+        UsesAmazeeAi::pingAmazeeAi as private originalPingAmazeeAi;
+        UsesAmazeeAi::createTeamAndSetupAdministrator as private originalCreateTeamAndSetupAdministrator;
+        UsesAmazeeAi::generateKeysForTeam as private originalGenerateKeysForTeam;
+        UsesAmazeeAi::getTeamDetails as private originalGetTeamDetails;
     }
 
     protected ?bool $devModeOverride = false;
@@ -89,7 +91,9 @@ trait UsesAmazeeAiDevmode
     }
 
     /**
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
+     * @return array{team_id: string, backend_key: APIToken, llm_key: LlmKeysResponse}
+     *
+     * @throws PolydockAppInstanceStatusFlowException
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array
     {
@@ -102,8 +106,8 @@ trait UsesAmazeeAiDevmode
 
             return [
                 'team_id' => 'devmode-team-id',
-                'backend_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
-                'llm_key' => new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse(1, 'database-name-here', 'llmkey-name', 'database-host', 'database-username', 'database-password', 'litellm-token', 'litellm-api-url', 'region-name', 'created-at', 1, 1),
+                'backend_key' => new APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
+                'llm_key' => new LlmKeysResponse(1, 'database-name-here', 'llmkey-name', 'database-host', 'database-username', 'database-password', 'litellm-token', 'litellm-api-url', 'region-name', 'created-at', 1, 1),
             ];
         }
 

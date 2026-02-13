@@ -12,6 +12,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         Mockery::close();
@@ -24,7 +25,7 @@ abstract class TestCase extends BaseTestCase
     protected function createMockPolydockAppInstance(array $keyValues = []): object
     {
         /** @var \Mockery\MockInterface $mock */
-        $mock = Mockery::mock('FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface');
+        $mock = Mockery::mock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
 
         foreach ($keyValues as $key => $value) {
             $mock->shouldReceive('getKeyValue')
@@ -49,7 +50,7 @@ abstract class TestCase extends BaseTestCase
     protected function createMockPolydockEngine(): object
     {
         /** @var \Mockery\MockInterface $mock */
-        $mock = Mockery::mock('FreedomtechHosting\PolydockApp\PolydockEngineInterface');
+        $mock = Mockery::mock(\FreedomtechHosting\PolydockApp\PolydockEngineInterface::class);
 
         return $mock;
     }
@@ -57,13 +58,13 @@ abstract class TestCase extends BaseTestCase
     protected function createMockPolydockServiceProvider(): object
     {
         /** @var \Mockery\MockInterface $mock */
-        $mock = Mockery::mock('FreedomtechHosting\PolydockApp\PolydockServiceProviderInterface');
+        $mock = Mockery::mock(\FreedomtechHosting\PolydockApp\PolydockServiceProviderInterface::class);
 
         // Add default expectations for interface methods
         $mock->shouldReceive('getName')->byDefault()->andReturn('test-provider');
         $mock->shouldReceive('getDescription')->byDefault()->andReturn('test-provider');
         $mock->shouldReceive('setLogger')->byDefault()->andReturnSelf();
-        $mock->shouldReceive('getLogger')->byDefault()->andReturn(Mockery::mock('FreedomtechHosting\PolydockApp\PolydockAppLoggerInterface'));
+        $mock->shouldReceive('getLogger')->byDefault()->andReturn(Mockery::mock(\FreedomtechHosting\PolydockApp\PolydockAppLoggerInterface::class));
         $mock->shouldReceive('info')->byDefault()->andReturnSelf();
         $mock->shouldReceive('error')->byDefault()->andReturnSelf();
         $mock->shouldReceive('warning')->byDefault()->andReturnSelf();

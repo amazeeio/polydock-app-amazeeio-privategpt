@@ -24,6 +24,7 @@ class FullWorkflowTest extends TestCase
         );
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         Mockery::close();
@@ -68,7 +69,6 @@ class FullWorkflowTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         // Test with all required values present
@@ -100,7 +100,6 @@ class FullWorkflowTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         // Test with missing required value
@@ -133,7 +132,6 @@ class FullWorkflowTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $result = $this->app->pingLagoonAPI();
@@ -149,7 +147,6 @@ class FullWorkflowTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $this->expectException(\FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException::class);
@@ -192,7 +189,6 @@ class FullWorkflowTest extends TestCase
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -222,14 +218,13 @@ class FullWorkflowTest extends TestCase
 
     public function test_handles_lagoon_api_errors_gracefully(): void
     {
-        $lagoonClient = $this->createMock('FreedomtechHosting\FtLagoonPhp\Client');
+        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')
             ->willThrowException(new \Exception('Connection timeout'));
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
-        $property->setAccessible(true);
         $property->setValue($this->app, $lagoonClient);
 
         $this->expectException(\FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException::class);

@@ -4,7 +4,6 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Client;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiValidationException;
-use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\AdministratorResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\HealthResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
@@ -12,24 +11,23 @@ use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\RegionResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\VdbKeysResponse;
 use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\TreeMapper;
 use CuyZ\Valinor\MapperBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 
-class AmazeeAiClient
+readonly class AmazeeAiClient
 {
     private ClientInterface $httpClient;
 
     private string $apiUrl;
 
-    private string $apiKey;
+    private TreeMapper $mapper;
 
-    private \CuyZ\Valinor\Mapper\TreeMapper $mapper;
-
-    public function __construct(string $apiKey, string $apiUrl = 'https://api.amazee.ai', ?ClientInterface $httpClient = null)
+    public function __construct(private string $apiKey, string $apiUrl = 'https://api.amazee.ai', ?ClientInterface $httpClient = null)
     {
-        $this->apiKey = $apiKey;
         $this->apiUrl = rtrim($apiUrl, '/');
 
         $this->httpClient = $httpClient ?? new Client([
@@ -93,6 +91,9 @@ class AmazeeAiClient
     }
 
     // Adding this simply for downstream convenience.
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function deleteTeam(string $teamId): string
     {
         try {
@@ -101,7 +102,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $data['message'];
-        } catch (RequestException $e) {
+        } catch (GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to delete team: '.$e->getMessage(),
                 $e->getCode(),
@@ -133,6 +134,8 @@ class AmazeeAiClient
 
     /**
      * @return RegionResponse[]
+     *
+     * @throws AmazeeAiClientException
      */
     public function getRegions(): array
     {
@@ -146,7 +149,7 @@ class AmazeeAiClient
                 fn ($region) => $this->mapResponse(RegionResponse::class, $region),
                 $data
             );
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to get regions: '.$e->getMessage(),
                 $e->getCode(),
@@ -155,6 +158,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function createBackendKey(int $teamId): APIToken
     {
         try {
@@ -167,7 +173,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(APIToken::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to generate backend key: '.$e->getMessage(),
                 $e->getCode(),
@@ -176,6 +182,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function createLlmKey(int $teamId, int $regionId): LlmKeysResponse
     {
         try {
@@ -190,7 +199,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(LlmKeysResponse::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to generate LLM keys: '.$e->getMessage(),
                 $e->getCode(),
@@ -199,6 +208,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function generateLlmKeys(string $teamId): LlmKeysResponse
     {
         try {
@@ -209,7 +221,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(LlmKeysResponse::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to generate LLM keys: '.$e->getMessage(),
                 $e->getCode(),
@@ -218,6 +230,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function generateVdbKeys(string $teamId): VdbKeysResponse
     {
         try {
@@ -228,7 +243,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(VdbKeysResponse::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to generate VDB keys: '.$e->getMessage(),
                 $e->getCode(),
@@ -237,6 +252,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function getTeam(string $teamId): TeamResponse
     {
         try {
@@ -245,7 +263,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(TeamResponse::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to get team: '.$e->getMessage(),
                 $e->getCode(),
@@ -254,6 +272,9 @@ class AmazeeAiClient
         }
     }
 
+    /**
+     * @throws AmazeeAiClientException
+     */
     public function health(): HealthResponse
     {
         try {
@@ -262,7 +283,7 @@ class AmazeeAiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $this->mapResponse(HealthResponse::class, $data);
-        } catch (RequestException $e) {
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
             throw new AmazeeAiClientException(
                 'Failed to check health: '.$e->getMessage(),
                 $e->getCode(),
@@ -277,7 +298,7 @@ class AmazeeAiClient
             $health = $this->health();
 
             return $health->status === 'healthy';
-        } catch (AmazeeAiClientException $e) {
+        } catch (AmazeeAiClientException) {
             return false;
         }
     }
