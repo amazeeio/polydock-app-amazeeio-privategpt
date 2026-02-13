@@ -18,7 +18,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 
-readonly class AmazeeAiClient
+class AmazeeAiClient
 {
     private ClientInterface $httpClient;
 
