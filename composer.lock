@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0463c6426ec44a98366765104c72aa80",
+    "content-hash": "80744c805c28669879e32d6e846b9684",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -1074,16 +1074,16 @@
         },
         {
             "name": "freedomtech-hosting/polydock-app-amazeeio-generic",
-            "version": "v0.0.77",
+            "version": "v0.0.79",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amazeeio/polydock-app-amazeeio-generic.git",
-                "reference": "73903abd05e7f7b0f11b89d11f24764389c2a80e"
+                "reference": "ab18815f8f26d605e9af32dc5e551ce3fb2fc81d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/73903abd05e7f7b0f11b89d11f24764389c2a80e",
-                "reference": "73903abd05e7f7b0f11b89d11f24764389c2a80e",
+                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/ab18815f8f26d605e9af32dc5e551ce3fb2fc81d",
+                "reference": "ab18815f8f26d605e9af32dc5e551ce3fb2fc81d",
                 "shasum": ""
             },
             "require": {
@@ -1110,9 +1110,9 @@
             "description": "Polydock App - amazee.io Generic",
             "support": {
                 "issues": "https://github.com/amazeeio/polydock-app-amazeeio-generic/issues",
-                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.78"
+                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.79"
             },
-            "time": "2026-02-17T13:15:12+00:00"
+            "time": "2026-02-18T20:37:21+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -4088,16 +4088,16 @@
         },
         {
             "name": "softonic/graphql-client",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/softonic/graphql-client.git",
-                "reference": "72ae042d3f22ad5eb57cd7672954d8f5dc9687ef"
+                "reference": "71efe9e93609a98f7878c7d323732ccfb817653d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/softonic/graphql-client/zipball/72ae042d3f22ad5eb57cd7672954d8f5dc9687ef",
-                "reference": "72ae042d3f22ad5eb57cd7672954d8f5dc9687ef",
+                "url": "https://api.github.com/repos/softonic/graphql-client/zipball/71efe9e93609a98f7878c7d323732ccfb817653d",
+                "reference": "71efe9e93609a98f7878c7d323732ccfb817653d",
                 "shasum": ""
             },
             "require": {
@@ -4105,7 +4105,7 @@
                 "guzzlehttp/guzzle": "^6.3 || ^7.0",
                 "php": "^8.0",
                 "softonic/guzzle-oauth2-middleware": "^2.1",
-                "symfony/console": "^6.0 || ^7.0"
+                "symfony/console": "^6.0 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.9",
@@ -4137,9 +4137,9 @@
             ],
             "support": {
                 "issues": "https://github.com/softonic/graphql-client/issues",
-                "source": "https://github.com/softonic/graphql-client/tree/3.1.1"
+                "source": "https://github.com/softonic/graphql-client/tree/3.1.2"
             },
-            "time": "2025-03-26T14:37:06+00:00"
+            "time": "2026-02-18T10:31:17+00:00"
         },
         {
             "name": "softonic/guzzle-oauth2-middleware",
