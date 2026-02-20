@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "80744c805c28669879e32d6e846b9684",
+    "content-hash": "baf6dc16a696807efaf1c4099be3419c",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -892,7 +892,7 @@
         },
         {
             "name": "filament/support",
-            "version": "v3.3.48",
+            "version": "v3.3.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
@@ -1074,16 +1074,16 @@
         },
         {
             "name": "freedomtech-hosting/polydock-app-amazeeio-generic",
-            "version": "v0.0.79",
+            "version": "v0.0.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amazeeio/polydock-app-amazeeio-generic.git",
-                "reference": "ab18815f8f26d605e9af32dc5e551ce3fb2fc81d"
+                "reference": "6d727943a3d8a2a53b87fb5b6d5311eb6b2f31ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/ab18815f8f26d605e9af32dc5e551ce3fb2fc81d",
-                "reference": "ab18815f8f26d605e9af32dc5e551ce3fb2fc81d",
+                "url": "https://api.github.com/repos/amazeeio/polydock-app-amazeeio-generic/zipball/6d727943a3d8a2a53b87fb5b6d5311eb6b2f31ea",
+                "reference": "6d727943a3d8a2a53b87fb5b6d5311eb6b2f31ea",
                 "shasum": ""
             },
             "require": {
@@ -1110,9 +1110,9 @@
             "description": "Polydock App - amazee.io Generic",
             "support": {
                 "issues": "https://github.com/amazeeio/polydock-app-amazeeio-generic/issues",
-                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.79"
+                "source": "https://github.com/amazeeio/polydock-app-amazeeio-generic/tree/v0.0.80"
             },
-            "time": "2026-02-18T20:37:21+00:00"
+            "time": "2026-02-20T15:30:55+00:00"
         },
         {
             "name": "fruitcake/php-cors",
