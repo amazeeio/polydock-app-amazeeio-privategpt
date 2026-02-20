@@ -74,6 +74,25 @@ class UsesAmazeeAiTest extends TestCase
         $this->assertSame('devmode-name', $teamResponse->name);
     }
 
+    public function test_devmode_generate_keys_for_team_returns_credentials_with_gateway_token(): void
+    {
+        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance->method('getKeyValue')
+            ->willReturnMap([
+                ['amazee-ai-backend-region-id', '1'],
+            ]);
+
+        $this->testClass->setAmazeeAiClientDevMode();
+        $credentials = $this->testClass->generateKeysForTeam($appInstance, 'devmode-team-id');
+
+        $this->assertArrayHasKey('team_id', $credentials);
+        $this->assertArrayHasKey('backend_key', $credentials);
+        $this->assertArrayHasKey('llm_key', $credentials);
+        $this->assertArrayHasKey('user_gateway_token', $credentials);
+        $this->assertSame('devmode-team-id', $credentials['team_id']);
+        $this->assertSame('gateway-token', $credentials['user_gateway_token']->token);
+    }
+
     public function test_set_amazee_ai_direct_client_from_app_instance_successfully_sets_amazee_ai_client_when_all_parameters_are_provided(): void
     {
         $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
@@ -286,6 +305,85 @@ class UsesAmazeeAiTest extends TestCase
         $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->expectExceptionMessage('Error getting team details: Team not found');
         $this->testClass->getTeamDetails('team-123');
+    }
+
+    public function test_generate_keys_for_team_throws_exception_when_region_id_is_missing(): void
+    {
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+
+        $reflection = new ReflectionClass($this->testClass);
+        $property = $reflection->getProperty('amazeeAiClient');
+        $property->setValue($this->testClass, $mockClient);
+
+        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance->method('getKeyValue')
+            ->willReturnMap([
+                ['amazee-ai-backend-region-id', ''],
+            ]);
+
+        $this->expectException(PolydockAppInstanceStatusFlowException::class);
+        $this->expectExceptionMessage('amazee.ai LLM region is required to generate LLM keys');
+        $this->testClass->generateKeysForTeam($appInstance, 'team-123');
+    }
+
+    public function test_generate_keys_for_team_returns_credentials_including_gateway_token(): void
+    {
+        $apiToken = new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken(
+            'test-token', 1, 'token-value', '2024-01-01T00:00:00Z', 1
+        );
+        $gatewayToken = new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken(
+            'test-gateway-token', 2, 'gateway-token-value', '2024-01-01T00:00:00Z', 1
+        );
+        $llmKey = new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse(
+            1, 'database-name', 'llm-key', 'host', 'user', 'pass', 'litellm-token', 'https://api.example.com', 'us', '2024-01-01T00:00:00Z', 1, 123
+        );
+
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient->method('createBackendKey')->willReturn($apiToken);
+        $mockClient->method('createUserGatewayToken')->willReturn($gatewayToken);
+        $mockClient->method('createLlmKey')->willReturn($llmKey);
+
+        $reflection = new ReflectionClass($this->testClass);
+        $property = $reflection->getProperty('amazeeAiClient');
+        $property->setValue($this->testClass, $mockClient);
+
+        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance->method('getKeyValue')
+            ->willReturnMap([
+                ['amazee-ai-backend-region-id', '1'],
+            ]);
+
+        $result = $this->testClass->generateKeysForTeam($appInstance, '123');
+
+        $this->assertArrayHasKey('team_id', $result);
+        $this->assertArrayHasKey('backend_key', $result);
+        $this->assertArrayHasKey('llm_key', $result);
+        $this->assertArrayHasKey('user_gateway_token', $result);
+        $this->assertSame('123', $result['team_id']);
+        $this->assertSame('token-value', $result['backend_key']->token);
+        $this->assertSame('gateway-token-value', $result['user_gateway_token']->token);
+        $this->assertSame('litellm-token', $result['llm_key']->litellm_token);
+    }
+
+    public function test_generate_keys_for_team_throws_exception_when_key_creation_fails(): void
+    {
+        $mockClient = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $mockClient->method('createBackendKey')
+            ->willThrowException(new AmazeeAiClientException('Failed to create backend key'));
+
+        $reflection = new ReflectionClass($this->testClass);
+        $property = $reflection->getProperty('amazeeAiClient');
+        $property->setValue($this->testClass, $mockClient);
+
+        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance->method('getKeyValue')
+            ->willReturnMap([
+                ['amazee-ai-backend-region-id', '1'],
+            ]);
+
+        $this->expectException(PolydockAppInstanceStatusFlowException::class);
+        $this->expectExceptionMessage('Error generating keys for team: Failed to create backend key');
+        $this->testClass->generateKeysForTeam($appInstance, '123');
     }
 
     protected function createMockPolydockAppInstance(array $keyValues = []): object

@@ -127,7 +127,7 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
+     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse, user_gateway_token: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken}
      *
      * @throws PolydockAppInstanceStatusFlowException
      */
@@ -144,18 +144,11 @@ trait UsesAmazeeAi
         $logContext['team_id'] = $teamId;
 
         try {
-            // $this->amazeeAiLogger?->info('Generating LLM keys for team', $logContext);
-            // $llmKeys = $this->getAmazeeAiClient()->generateLlmKeys($teamId);
-
-            // $this->amazeeAiLogger?->info('Generating VDB keys for team', $logContext);
-            // $vdbKeys = $this->getAmazeeAiClient()->generateVdbKeys($teamId);
-
             $credentials = [
                 'team_id' => $teamId,
                 'backend_key' => $this->getAmazeeAiClient()->createBackendKey(intval($teamId)),
                 'llm_key' => $this->getAmazeeAiClient()->createLlmKey(intval($teamId), intval($llmRegionId)),
-                // 'llm_keys' => $llmKeys,
-                // 'vdb_keys' => $vdbKeys,
+                'user_gateway_token' => $this->getAmazeeAiClient()->createUserGatewayToken(intval($teamId)),
             ];
 
             $this->amazeeAiLogger?->info('Keys generated successfully for team', $logContext);

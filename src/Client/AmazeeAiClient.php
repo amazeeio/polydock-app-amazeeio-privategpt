@@ -183,6 +183,33 @@ class AmazeeAiClient
     }
 
     /**
+     * Creates a user-specific gateway token that allows direct communication
+     * with the amazee.ai API on behalf of the provisioned team.
+     *
+     * @throws AmazeeAiClientException
+     */
+    public function createUserGatewayToken(int $teamId): APIToken
+    {
+        try {
+            $response = $this->httpClient->request('POST', '/auth/token', [
+                'json' => [
+                    'name' => sprintf('private-gpt-user-%d', $teamId),
+                ],
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return $this->mapResponse(APIToken::class, $data);
+        } catch (AmazeeAiValidationException|GuzzleException|RequestException $e) {
+            throw new AmazeeAiClientException(
+                'Failed to generate user gateway token: '.$e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    /**
      * @throws AmazeeAiClientException
      */
     public function createLlmKey(int $teamId, int $regionId): LlmKeysResponse

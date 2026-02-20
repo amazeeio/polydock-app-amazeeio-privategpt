@@ -154,6 +154,9 @@ trait PostCreateAppInstanceTrait
                 } else {
                     throw new \RuntimeException('No backend_key token found in amazee-ai-team-credentials');
                 }
+                if (isset($credentials['user_gateway_token']) && isset($credentials['user_gateway_token']['token'])) {
+                    $this->postCreateLagoonOps?->addOrUpdateLagoonProjectVariable($appInstance, 'POLYDOCK_USER_GATEWAY_TOKEN', $credentials['user_gateway_token']['token'], 'GLOBAL');
+                }
             }
 
             // Chainlit details - seems to be hardcoded

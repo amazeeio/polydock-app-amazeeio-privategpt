@@ -91,7 +91,7 @@ trait UsesAmazeeAiDevmode
     }
 
     /**
-     * @return array{team_id: string, backend_key: APIToken, llm_key: LlmKeysResponse}
+     * @return array{team_id: string, backend_key: APIToken, llm_key: LlmKeysResponse, user_gateway_token: APIToken}
      *
      * @throws PolydockAppInstanceStatusFlowException
      */
@@ -108,6 +108,7 @@ trait UsesAmazeeAiDevmode
                 'team_id' => 'devmode-team-id',
                 'backend_key' => new APIToken('devmode-token', 1, 'token', 'created-at', 1, 'last-used-at'),
                 'llm_key' => new LlmKeysResponse(1, 'database-name-here', 'llmkey-name', 'database-host', 'database-username', 'database-password', 'litellm-token', 'litellm-api-url', 'region-name', 'created-at', 1, 1),
+                'user_gateway_token' => new APIToken('devmode-gateway-token', 2, 'gateway-token', 'created-at', 1, 'last-used-at'),
             ];
         }
 

@@ -405,6 +405,141 @@ class AmazeeAiClientTest extends TestCase
         }
     }
 
+    /**
+     * Test successful backend key creation
+     */
+    public function test_create_backend_key_success(): void
+    {
+        $responseBody = file_get_contents(__DIR__.'/../Mocks/MockResponses/amazeeai/api_token_success.json');
+        if ($responseBody === false) {
+            $this->fail('Failed to read mock response file');
+        }
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $responseBody),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $result = $client->createBackendKey(123);
+
+        $this->assertInstanceOf(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken::class, $result);
+        $this->assertSame('test-api-token-abc123def456', $result->token);
+        $this->assertSame(456, $result->id);
+        $this->assertSame(1, $result->user_id);
+    }
+
+    /**
+     * Test backend key creation failure throws exception
+     */
+    public function test_create_backend_key_failure(): void
+    {
+        $mock = new MockHandler([
+            new RequestException('Server Error', new Request('POST', '/auth/token')),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $this->expectException(AmazeeAiClientException::class);
+        $this->expectExceptionMessage('Failed to generate backend key');
+        $client->createBackendKey(123);
+    }
+
+    /**
+     * Test backend key creation sends correct request data
+     */
+    public function test_create_backend_key_request_data(): void
+    {
+        $responseBody = file_get_contents(__DIR__.'/../Mocks/MockResponses/amazeeai/api_token_success.json');
+        if ($responseBody === false) {
+            $this->fail('Failed to read mock response file');
+        }
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $responseBody),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $client->createBackendKey(123);
+
+        $lastRequest = $mock->getLastRequest();
+        if ($lastRequest) {
+            $requestBody = json_decode($lastRequest->getBody()->getContents(), true);
+
+            $this->assertSame([
+                'name' => 'private-gpt-backend-123',
+            ], $requestBody);
+        }
+    }
+
+    /**
+     * Test successful user gateway token creation
+     */
+    public function test_create_user_gateway_token_success(): void
+    {
+        $responseBody = file_get_contents(__DIR__.'/../Mocks/MockResponses/amazeeai/api_token_success.json');
+        if ($responseBody === false) {
+            $this->fail('Failed to read mock response file');
+        }
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $responseBody),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $result = $client->createUserGatewayToken(123);
+
+        $this->assertInstanceOf(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken::class, $result);
+        $this->assertSame('test-api-token-abc123def456', $result->token);
+        $this->assertSame(456, $result->id);
+    }
+
+    /**
+     * Test user gateway token creation failure throws exception
+     */
+    public function test_create_user_gateway_token_failure(): void
+    {
+        $mock = new MockHandler([
+            new RequestException('Server Error', new Request('POST', '/auth/token')),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $this->expectException(AmazeeAiClientException::class);
+        $this->expectExceptionMessage('Failed to generate user gateway token');
+        $client->createUserGatewayToken(123);
+    }
+
+    /**
+     * Test user gateway token creation sends correct request data with user-specific name
+     */
+    public function test_create_user_gateway_token_request_data(): void
+    {
+        $responseBody = file_get_contents(__DIR__.'/../Mocks/MockResponses/amazeeai/api_token_success.json');
+        if ($responseBody === false) {
+            $this->fail('Failed to read mock response file');
+        }
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $responseBody),
+        ]);
+
+        $client = $this->createClientWithMockHandler($mock);
+
+        $client->createUserGatewayToken(123);
+
+        $lastRequest = $mock->getLastRequest();
+        if ($lastRequest) {
+            $requestBody = json_decode($lastRequest->getBody()->getContents(), true);
+
+            $this->assertSame([
+                'name' => 'private-gpt-user-123',
+            ], $requestBody);
+        }
+    }
+
     private function createClientWithMockHandler(MockHandler $mockHandler): AmazeeAiClient
     {
         $handlerStack = HandlerStack::create($mockHandler);

@@ -1,0 +1,8 @@
+{
+  "name": "private-gpt-backend-123",
+  "id": 456,
+  "token": "test-api-token-abc123def456",
+  "created_at": "2024-01-01T00:00:00Z",
+  "user_id": 1,
+  "last_used_at": null
+}
