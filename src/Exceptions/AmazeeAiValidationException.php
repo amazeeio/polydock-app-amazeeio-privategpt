@@ -17,7 +17,7 @@ class AmazeeAiValidationException extends AmazeeAiClientException
     private function formatMappingError(MappingError $error): string
     {
         $messages = [];
-        foreach ($error->node()->messages() as $message) {
+        foreach ($error->messages() as $message) {
             $messages[] = (string) $message;
         }
 
