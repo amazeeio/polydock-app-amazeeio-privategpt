@@ -1,62 +1,62 @@
 {
-  "name": "amazeeio/polydock-app-amazeeio-privategpt",
-  "description": "Polydock App - amazee.io PrivateGPT with Direct API Integration",
-  "type": "library",
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Amazeeio\\PolydockAppAmazeeioPrivateGpt\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "authors": [
-    {
-      "name": "Philipp Melab",
-      "email": "philipp.melab@amazeelabs.com"
-    }
-  ],
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "require": {
-    "freedomtech-hosting/polydock-app": "^0.0.30",
-    "freedomtech-hosting/polydock-app-amazeeio-generic": "^0.0.79",
-    "freedomtech-hosting/ft-lagoon-php": "^0.0.11",
-    "guzzlehttp/guzzle": "^7.0",
-    "cuyz/valinor": "^1.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^10.0",
-    "mockery/mockery": "*",
-    "orchestra/testbench": "*",
-    "laravel/pint": "^1.22",
-    "phpstan/phpstan": "^1.10",
-    "phpstan/extension-installer": "*",
-    "phpstan/phpstan-mockery": "^1.1"
-  },
-  "config": {
-    "allow-plugins": {
-      "phpstan/extension-installer": true
-    }
-  },
-  "scripts": {
-    "test": [
-      "@phpstan",
-      "@phpunit"
+    "name": "amazeeio/polydock-app-amazeeio-privategpt",
+    "description": "Polydock App - amazee.io PrivateGPT with Direct API Integration",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Amazeeio\\PolydockAppAmazeeioPrivateGpt\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Philipp Melab",
+            "email": "philipp.melab@amazeelabs.com"
+        }
     ],
-    "phpunit": "./vendor/bin/phpunit",
-    "phpstan": "./vendor/bin/phpstan analyze --memory-limit=1G",
-    "phpstan:src": "./vendor/bin/phpstan analyze src --memory-limit=1G",
-    "pint": "./vendor/bin/pint",
-    "format": "@pint",
-    "generate-dtos": "php generate-dtos.php",
-    "check": [
-      "@phpstan",
-      "@phpunit",
-      "@pint --test"
-    ]
-  }
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "freedomtech-hosting/polydock-app": "^0.0.31",
+        "freedomtech-hosting/polydock-app-amazeeio-generic": "^0.0.80",
+        "freedomtech-hosting/ft-lagoon-php": "^0.0.12",
+        "guzzlehttp/guzzle": "^7.10.0",
+        "cuyz/valinor": "^2.3.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "mockery/mockery": "^1.6.12",
+        "orchestra/testbench": "*",
+        "laravel/pint": "^1.27.1",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/extension-installer": "*",
+        "phpstan/phpstan-mockery": "^1.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phpstan",
+            "@phpunit"
+        ],
+        "phpunit": "./vendor/bin/phpunit",
+        "phpstan": "./vendor/bin/phpstan analyze --memory-limit=1G",
+        "phpstan:src": "./vendor/bin/phpstan analyze src --memory-limit=1G",
+        "pint": "./vendor/bin/pint",
+        "format": "@pint",
+        "generate-dtos": "php generate-dtos.php",
+        "check": [
+            "@phpstan",
+            "@phpunit",
+            "@pint --test"
+        ]
+    }
 }
