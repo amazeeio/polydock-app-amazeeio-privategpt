@@ -2,10 +2,15 @@
 
 namespace Tests\Unit;
 
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
 use Exception;
+use FreedomtechHosting\FtLagoonPhp\Client;
+use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 use FreedomtechHosting\PolydockApp\PolydockAppVariableDefinitionBase;
+use FreedomtechHosting\PolydockApp\PolydockEngineInterface;
+use FreedomtechHosting\PolydockApp\PolydockServiceProviderInterface;
 use Mockery;
 use ReflectionClass;
 use Tests\TestCase;
@@ -106,7 +111,7 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_ping_lagoon_success(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')->willReturn(true);
 
@@ -139,7 +144,7 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_ping_lagoon_failure(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')->willThrowException(new Exception('Connection failed'));
 
@@ -157,16 +162,16 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_set_lagoon_client_success(): void
     {
-        $mockEngine = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockEngineInterface::class);
-        $mockLagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
-        $mockServiceProvider = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LagoonClientProviderInterface::class);
+        $mockEngine = $this->createMock(PolydockEngineInterface::class);
+        $mockLagoonClient = $this->createMock(Client::class);
+        $mockServiceProvider = $this->createMock(LagoonClientProviderInterface::class);
         $mockServiceProvider->method('getLagoonClient')->willReturn($mockLagoonClient);
 
         $mockEngine->method('getPolydockServiceProviderSingletonInstance')
             ->with('PolydockServiceProviderFTLagoon')
             ->willReturn($mockServiceProvider);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getEngine')
             ->willReturn($mockEngine);
 
@@ -206,14 +211,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_lagoon_values_success(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-deploy-git', 'https://github.com/test/repo.git'],
@@ -239,14 +244,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_lagoon_values_no_git(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-deploy-git', ''],
@@ -272,14 +277,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_lagoon_values_no_app_type(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-deploy-git', 'https://github.com/test/repo.git'],
@@ -305,14 +310,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_project_name_success(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->with('lagoon-project-name')
             ->willReturn('test-project');
@@ -327,14 +332,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_project_name_missing(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->with('lagoon-project-name')
             ->willReturn('');
@@ -349,14 +354,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_project_id_success(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->with('lagoon-project-id')
             ->willReturn('123');
@@ -371,14 +376,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_verify_project_id_missing(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->with('lagoon-project-id')
             ->willReturn('');
@@ -393,14 +398,14 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_add_update_variable_success(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
@@ -422,7 +427,7 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     public function test_add_update_variable_failure(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('addOrUpdateScopedVariableForProject')
             ->willReturn(['error' => 'Variable update failed']);
@@ -431,7 +436,7 @@ class PolydockPrivateGptAppTest extends TestCase
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
@@ -466,7 +471,7 @@ class PolydockPrivateGptAppTest extends TestCase
      */
     protected function createMockPolydockAppInstance(array $keyValues = []): object
     {
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
 
         $appInstance->method('getKeyValue')
             ->willReturnCallback(fn ($key) => $keyValues[$key] ?? null);
@@ -476,11 +481,11 @@ class PolydockPrivateGptAppTest extends TestCase
 
     protected function createMockPolydockEngine(): object
     {
-        return $this->createMock(\FreedomtechHosting\PolydockApp\PolydockEngineInterface::class);
+        return $this->createMock(PolydockEngineInterface::class);
     }
 
     protected function createMockPolydockServiceProvider(): object
     {
-        return $this->createMock(\FreedomtechHosting\PolydockApp\PolydockServiceProviderInterface::class);
+        return $this->createMock(PolydockServiceProviderInterface::class);
     }
 }

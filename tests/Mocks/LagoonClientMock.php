@@ -4,12 +4,13 @@ namespace Tests\Mocks;
 
 use FreedomtechHosting\FtLagoonPhp\Client as LagoonClient;
 use Mockery;
+use Mockery\MockInterface;
 
 class LagoonClientMock
 {
     public static function create(): object
     {
-        /** @var \Mockery\MockInterface $mock */
+        /** @var MockInterface $mock */
         $mock = Mockery::mock(LagoonClient::class);
 
         $mock->allows('pingLagoonAPI')->andReturn(true);
@@ -61,7 +62,7 @@ class LagoonClientMock
 
     public static function createWithFailures(): object
     {
-        /** @var \Mockery\MockInterface $mock */
+        /** @var MockInterface $mock */
         $mock = Mockery::mock(LagoonClient::class);
 
         $mock->allows('pingLagoonAPI')->andThrow(new \Exception('Connection timeout'));

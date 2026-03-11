@@ -4,6 +4,8 @@ namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Traits;
 
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces\LoggerInterface;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
@@ -127,7 +129,7 @@ trait UsesAmazeeAi
     }
 
     /**
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
+     * @return array{team_id: string, backend_key: APIToken, llm_key: LlmKeysResponse}
      *
      * @throws PolydockAppInstanceStatusFlowException
      */

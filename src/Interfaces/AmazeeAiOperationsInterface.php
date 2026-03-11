@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Amazeeio\PolydockAppAmazeeioPrivateGpt\Interfaces;
 
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\TeamResponse;
 use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
 
@@ -22,7 +24,7 @@ interface AmazeeAiOperationsInterface
     /**
      * Generate keys for a team
      *
-     * @return array{team_id: string, backend_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\APIToken, llm_key: \Amazeeio\PolydockAppAmazeeioPrivateGpt\Generated\Dto\LlmKeysResponse}
+     * @return array{team_id: string, backend_key: APIToken, llm_key: LlmKeysResponse}
      */
     public function generateKeysForTeam(PolydockAppInstanceInterface $appInstance, string $teamId): array;
 }

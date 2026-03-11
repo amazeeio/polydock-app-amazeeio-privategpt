@@ -2,7 +2,12 @@
 
 namespace Tests\Integration;
 
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient;
+use Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException;
 use Amazeeio\PolydockAppAmazeeioPrivateGpt\PolydockPrivateGptApp;
+use FreedomtechHosting\FtLagoonPhp\Client;
+use FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface;
+use FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException;
 use Mockery;
 use ReflectionClass;
 use Tests\TestCase;
@@ -64,7 +69,7 @@ class FullWorkflowTest extends TestCase
 
     public function test_validates_required_lagoon_configuration_values(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
@@ -72,7 +77,7 @@ class FullWorkflowTest extends TestCase
         $property->setValue($this->app, $lagoonClient);
 
         // Test with all required values present
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-deploy-git', 'https://github.com/amazeeio/privatgpt-template.git'],
@@ -95,7 +100,7 @@ class FullWorkflowTest extends TestCase
 
     public function test_rejects_incomplete_lagoon_configuration(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         $reflection = new ReflectionClass($this->app);
@@ -103,7 +108,7 @@ class FullWorkflowTest extends TestCase
         $property->setValue($this->app, $lagoonClient);
 
         // Test with missing required value
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-deploy-git', ''], // Missing required value (empty string per interface contract)
@@ -126,7 +131,7 @@ class FullWorkflowTest extends TestCase
 
     public function test_can_work_with_mocked_lagoon_client(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')->willReturn(true);
 
@@ -141,7 +146,7 @@ class FullWorkflowTest extends TestCase
 
     public function test_can_handle_lagoon_client_failures(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')->willThrowException(new \Exception('Connection timeout'));
 
@@ -149,13 +154,13 @@ class FullWorkflowTest extends TestCase
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $this->expectException(\FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException::class);
+        $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->app->pingLagoonAPI();
     }
 
     public function test_can_work_with_mocked_amazee_ai_client(): void
     {
-        $client = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
+        $client = $this->createMock(AmazeeAiClient::class);
         $client->method('ping')->willReturn(true);
 
         $result = $client->ping();
@@ -165,16 +170,16 @@ class FullWorkflowTest extends TestCase
 
     public function test_can_handle_amazee_ai_client_failures(): void
     {
-        $client = $this->createMock(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Client\AmazeeAiClient::class);
-        $client->method('ping')->willThrowException(new \Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException('API is down'));
+        $client = $this->createMock(AmazeeAiClient::class);
+        $client->method('ping')->willThrowException(new AmazeeAiClientException('API is down'));
 
-        $this->expectException(\Amazeeio\PolydockAppAmazeeioPrivateGpt\Exceptions\AmazeeAiClientException::class);
+        $this->expectException(AmazeeAiClientException::class);
         $client->ping();
     }
 
     public function test_can_add_or_update_lagoon_project_variables(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
 
         // Mock successful variable update
@@ -191,7 +196,7 @@ class FullWorkflowTest extends TestCase
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $appInstance = $this->createMock(\FreedomtechHosting\PolydockApp\PolydockAppInstanceInterface::class);
+        $appInstance = $this->createMock(PolydockAppInstanceInterface::class);
         $appInstance->method('getKeyValue')
             ->willReturnMap([
                 ['lagoon-project-name', 'test-project'],
@@ -212,13 +217,13 @@ class FullWorkflowTest extends TestCase
     public function test_handles_missing_lagoon_client_gracefully(): void
     {
         // No lagoon client set
-        $this->expectException(\FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException::class);
+        $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->app->pingLagoonAPI();
     }
 
     public function test_handles_lagoon_api_errors_gracefully(): void
     {
-        $lagoonClient = $this->createMock(\FreedomtechHosting\FtLagoonPhp\Client::class);
+        $lagoonClient = $this->createMock(Client::class);
         $lagoonClient->method('getDebug')->willReturn(false);
         $lagoonClient->method('pingLagoonAPI')
             ->willThrowException(new \Exception('Connection timeout'));
@@ -227,7 +232,7 @@ class FullWorkflowTest extends TestCase
         $property = $reflection->getProperty('lagoonClient');
         $property->setValue($this->app, $lagoonClient);
 
-        $this->expectException(\FreedomtechHosting\PolydockApp\PolydockAppInstanceStatusFlowException::class);
+        $this->expectException(PolydockAppInstanceStatusFlowException::class);
         $this->app->pingLagoonAPI();
     }
 }
