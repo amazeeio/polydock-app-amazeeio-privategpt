@@ -387,12 +387,12 @@ class PolydockPrivateGptApp extends PolydockAppBase implements AmazeeAiOperation
             $variable = $this->lagoonClient->addOrUpdateScopedVariableForProject($projectName, $variableName, $variableValue, $variableScope);
 
             if (isset($variable['error'])) {
-                $this->error('Failed to add or update '.$variableName.' variable',
+                $this->error("Failed to add or update {$variableName} variable",
                     $logContext + [
                         'lagoonVariable' => $variable,
                         'error' => $variable['error'],
                     ]);
-                throw new \Exception('Failed to add or update '.$variableName.' variable');
+                throw new \Exception("Failed to add or update {$variableName} variable");
             }
 
             if ($this->lagoonClient->getDebug()) {
