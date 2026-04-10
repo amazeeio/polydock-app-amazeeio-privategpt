@@ -24,9 +24,9 @@
     "require": {
         "freedomtech-hosting/polydock-app": "^0.0.33",
         "freedomtech-hosting/polydock-app-amazeeio-generic": "^0.1",
-        "freedomtech-hosting/ft-lagoon-php": "^0.0.16",
-        "guzzlehttp/guzzle": "^7.10.0",
-        "cuyz/valinor": "^2.3.2"
+        "freedomtech-hosting/ft-lagoon-php": "^0.1",
+        "guzzlehttp/guzzle": "^7.10",
+        "cuyz/valinor": "^2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
